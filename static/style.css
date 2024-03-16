@@ -1,11 +1,12 @@
 body {
+    font-family: "Varela Round", sans-serif;
     margin: 0;
     padding: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #007bff;
+    background-color: #0078D4;
 }
 
 .flashcard-container {
@@ -17,4 +18,23 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 34px;
+}
+.dark-theme {
+    background-color: #333; /* Dark background color */
+    color: #fff; /* Light text color */
+}
+
+.dark-theme .flashcard-container {
+    background-color: #3c3c3c; /* Dark flashcard background */
+}
+
+#theme-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 34px;
+    background-color: transparent; /* Remove background color */
+    border: none; /* Remove border */
+    cursor: pointer;
 }

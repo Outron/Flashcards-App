@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <title>Flashcards</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
 </head>
 <body>
 <div class="flashcard-container">
     <!-- Your flashcard content goes here -->
     <p>This is a flashcard</p>
 </div>
+
+<button id="theme-toggle" class="material-icons">brightness_4</button>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
