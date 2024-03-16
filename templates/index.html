@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
 </head>
 <body>
-<div class="flashcard-container">
-    <!-- Your flashcard content goes here -->
-    <p>This is a flashcard</p>
-</div>
-
+<div class="flashcard" onclick="toggleCard()">
+        <div class="card-inner">
+            <div class="card-front" id="question">{{ question }}</div>
+            <div class="card-back hidden" id="answer">{{ answer }}</div>
+        </div>
+    </div>
 <button id="theme-toggle" class="material-icons">brightness_4</button>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
