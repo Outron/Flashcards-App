@@ -9,11 +9,20 @@
 </head>
 <body>
 <div class="flashcard" onclick="toggleCard()">
-        <div class="card-inner">
-            <div class="card-front" id="question">{{ question }}</div>
-            <div class="card-back hidden" id="answer">{{ answer }}</div>
-        </div>
+    <div class="card-inner">
+        <div class="card-front" id="question">{{ question }}</div>
+        <div class="card-back hidden" id="answer">{{ answer }}</div>
     </div>
+</div>
+
+<button id="menu-button" class="material-icons" onclick="toggleMenu()">menu</button>
+
+    <!-- Boczne menu -->
+    <div class="side-menu">
+        <h2>Menu</h2>
+        <!-- Tutaj możesz dodać swoje pozycje menu -->
+    </div>
+
 <button id="theme-toggle" class="material-icons">brightness_4</button>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
