@@ -72,6 +72,9 @@ body {
     cursor: pointer;
 }
 
+
+/* SIDE MENU */
+
 .side-menu {
     position: fixed;
     top: 0;
@@ -95,13 +98,88 @@ body {
     font-size: 34px;
 }
 
+.add-question .edit-question, .question-delete {
+    display: none;
+    padding-bottom: 20px;
+}
+
+.question-text{
+    padding-top: 5%;
+    text-align: center;
+    font-size: 29px;
+}
+
+#question-input,
+#answer-input
+{
+    margin: auto;
+    width: 228px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#question-select,
+#question-delete
+{
+    margin: auto;
+    width: 100%; 
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.show-inputs .add-question .edit-question {
+    display: block;
+    padding-bottom: 20px;
+    
+}
+
+#add-button {
+    background-color: #0078D4; 
+    color: white; 
+    border: none; 
+    border-radius: 14px; 
+    width: 250px; 
+    height: 40px; 
+    font-size: 24px; 
+    cursor: pointer; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+#add-button:hover {
+    background-color: #005EA2; 
+}
+
+#delete-button {
+    font-size: 24px;
+    background-color: rgb(207, 0, 0); /* Kolor czerwony */
+    color: white;
+    border: none;
+    width: 250px; 
+    height: 40px; 
+    
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#delete-button:hover {
+    background-color: darkred; /* Kolor czerwony po najechaniu */
+}
+
+/* BUTTONS TO CHANGE FLASHCARDS */
 
 #button_prev {
-     position: flex;
-     background-color: transparent;
-     border: none;
-     cursor: pointer;
-     font-size: 80px
+    position: flex;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 80px
 }
 
 #button_next {

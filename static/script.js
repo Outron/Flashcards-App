@@ -34,12 +34,12 @@ function toggleCard(transition) {
     }
 }
 
-
-
 function toggleMenu() {
     var sideMenu = document.querySelector('.side-menu');
     sideMenu.style.left = sideMenu.style.left === '0px' ? '-290px' : '0px';
+    sideMenu.classList.toggle('show-inputs');
 }
+
 
 $(document).ready(function () {
     var currentIndex = 0;
@@ -53,14 +53,13 @@ $(document).ready(function () {
             showQuestion(currentIndex);
         },
         error: function (xhr, status, error) {
-            console.error("Błąd pobierania danych o pytaniach:", error);
+            console.error("Error retrieving question data:", error);
         }
     });
 
     function showQuestion(index) {
         var question = questions[index].question;
         var answer = questions[index].answer;
-        // Pokaż pytanie
         $('#question').text(question);
         $('#answer').text(answer);
 
@@ -68,7 +67,6 @@ $(document).ready(function () {
 
     $('#button_prev').click(function () {
         currentIndex = (currentIndex - 1 + questions.length) % questions.length;
-        // if transform is  rotateY(180deg) then toggle
         if (document.querySelector('.card-inner').style.transform === 'rotateY(180deg)') {
 
             toggleCard(false);
@@ -92,3 +90,4 @@ $(document).ready(function () {
 
     });
 });
+
