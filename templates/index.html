@@ -34,22 +34,16 @@
                 <button id="add-button" class="material-icons">add</button>
             </form>
         </div>
-        <div class="edit-question">
-            <h2 class="question-text">Edit Q&A</h2>
-            <select id="question-select">
-                {% for question in questions %}
-                <option value="{{question._id}}">{{question["question"]}}</option>
-                {% endfor %}
-            </select>
-        </div>
         <div class="delete-question">
             <h2 class="question-text">Delete Q&A</h2>
-            <select id="question-delete">
-                {% for question in questions %}
-                <option value="{{question._id}}">{{question["question"]}}</option>
-                {% endfor %}
-            </select>
-            <button id="delete-button" class="material-icons">delete</button>
+            <form action="/delete_question" method="post">
+                <select id="question-delete" name="question_id">
+                    {% for question in questions %}
+                        <option value="{{question._id}}">{{question["question"]}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" id="delete-button" class="material-icons">delete</button>
+            </form>
         </div>
     </div>
 

@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pymongo import MongoClient
 
@@ -11,7 +12,7 @@ flashcards = db.flashcards
 @app.route("/", methods=['GET', 'POST'])
 def home():
     if request.method == 'GET':
-        questions = list(flashcards.find({}, {"_id": 0, "question": 1, "answer": 1}))
+        questions = list(flashcards.find({}, {"_id": 1, "question": 1, "answer": 1}))
         return render_template('index.html', questions=questions)
     elif request.method == 'POST':
         questions = list(flashcards.find({}, {"_id": 0, "question": 1, "answer": 1}))
@@ -25,6 +26,18 @@ def add_question():
         answer = request.form['answer']
         flashcards.insert_one({'question': question, 'answer': answer})
         return redirect(url_for('home'))
+    else:
+        return 'Invalid request'
+
+
+@app.route('/delete_question', methods=['POST'])
+def delete_question():
+    if 'question_id' in request.form:
+        question_id = request.form['question_id']
+        flashcards.delete_one({'_id': ObjectId(question_id)})
+        return redirect(url_for('home'))
+    else:
+        return 'Invalid request'
 
 
 if __name__ == '__main__':
