@@ -15,7 +15,7 @@ body {
     height: 500px;
     background-color: #fff;
     display: flex;
-    order-radius: 10px;
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     justify-content: center;
     align-items: center;
@@ -53,10 +53,6 @@ body {
     transform: rotateY(180deg);
 }
 
-.hidden {
-    display: none;
-}
-
 .dark-theme {
     background-color: #333;
     color: #fff;
@@ -79,13 +75,13 @@ body {
 .side-menu {
     position: fixed;
     top: 0;
-    left: -290px; /* Ukryj menu po lewej stronie */
+    left: -290px;
     width: 250px;
     height: 100%;
     background-color: #f4f4f4;
     padding: 20px;
     transition: left 0.5s ease;
-    z-index: 9999; /* Ustaw z-index na wysoki poziom, aby menu było nad innymi elementami */
+    z-index: 9999;
 }
 
 #menu-button {
@@ -93,8 +89,25 @@ body {
     top: 10px;
     left: 10px;
     cursor: pointer;
-    z-index: 10000; /* Ustaw z-index na jeszcze wyższy poziom, aby przycisk był nad menu */
+    z-index: 10000;
     background-color: transparent;
     border: none;
     font-size: 34px;
+}
+
+
+#button_prev {
+     position: flex;
+     background-color: transparent;
+     border: none;
+     cursor: pointer;
+     font-size: 80px
+}
+
+#button_next {
+     position: flex;
+     background-color: transparent;
+     border: none;
+     cursor: pointer;
+     font-size: 80px
 }

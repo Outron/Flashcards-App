@@ -6,22 +6,26 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div class="flashcard" onclick="toggleCard()">
+
+<button id="button_prev" class="material-icons">chevron_left</button>
+
+<div id="flashcard" class="flashcard" onclick="toggleCard(true)">
     <div class="card-inner">
-        <div class="card-front" id="question">{{ question }}</div>
-        <div class="card-back hidden" id="answer">{{ answer }}</div>
+        <div class="card-front" id="question"></div>
+        <div class="card-back hidden" id="answer"></div>
     </div>
 </div>
 
+<button id="button_next" class="material-icons">chevron_right</button>
+
 <button id="menu-button" class="material-icons" onclick="toggleMenu()">menu</button>
 
-    <!-- Boczne menu -->
-    <div class="side-menu">
-        <h2>Menu</h2>
-        <!-- Tutaj możesz dodać swoje pozycje menu -->
-    </div>
+<div class="side-menu">
+    <h2>Menu</h2>
+</div>
 
 <button id="theme-toggle" class="material-icons">brightness_4</button>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
