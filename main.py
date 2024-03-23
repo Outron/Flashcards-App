@@ -2,6 +2,7 @@ from bson import ObjectId
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from pymongo import MongoClient
 
+
 app = Flask(__name__)
 client = MongoClient('localhost', 27017, username='admin', password='password')
 
@@ -47,6 +48,7 @@ def delete_question():
 def change_set():
     if 'set_name' in request.form:
         set_name = request.form['set_name']
+        session['set_name'] = request.form['set_name']
         global flashcards
         flashcards = db[set_name]
         return redirect(url_for('home'))

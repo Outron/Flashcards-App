@@ -1,75 +1,40 @@
 const themeToggle = document.getElementById('theme-toggle');
 const body = document.body;
+const cardInner = document.querySelector('.card-inner');
+const sideMenu = document.querySelector('.side-menu');
 
-themeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-theme');
-});
+themeToggle.addEventListener('click', () => body.classList.toggle('dark-theme'));
 
 function toggleCard(transition) {
-    var cardInner = document.querySelector('.card-inner');
     cardInner.style.transform = cardInner.style.transform === 'rotateY(180deg)' ? 'rotateY(0)' : 'rotateY(180deg)';
-    if (transition === true) {
-        cardInner.style.transition = 'transform 0.5s';
-    }
-    else {
-        cardInner.style.transition = 'none';
-    }
+    cardInner.style.transition = transition ? 'transform 0.5s' : 'none';
 }
 
 function toggleMenu() {
-    var sideMenu = document.querySelector('.side-menu');
     sideMenu.style.left = sideMenu.style.left === '0px' ? '-290px' : '0px';
     sideMenu.classList.toggle('show-inputs');
 }
 
-
 $(document).ready(function () {
-    var currentIndex = 0;
-    var questions = [];
+    let currentIndex = 0;
+    let questions = [];
 
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        success: function (data) {
-            questions = data.questions;
-            showQuestion(currentIndex);
-        },
-        error: function (xhr, status, error) {
-            console.error("Error retrieving question data:", error);
-        }
+    $.post('/', function (data) {
+        questions = data.questions;
+        showQuestion(currentIndex);
+    }).fail(function (xhr, status, error) {
+        console.error("Error retrieving question data:", error);
     });
 
     function showQuestion(index) {
-        var question = questions[index].question;
-        var answer = questions[index].answer;
+        const { question, answer } = questions[index];
         $('#question').text(question);
         $('#answer').text(answer);
-
     }
 
-    $('#button_prev').click(function () {
-        currentIndex = (currentIndex - 1 + questions.length) % questions.length;
-        if (document.querySelector('.card-inner').style.transform === 'rotateY(180deg)') {
-
-            toggleCard(false);
-            showQuestion(currentIndex);
-        }
-        else {
-            showQuestion(currentIndex);
-        }
-
-    });
-
-    $('#button_next').click(function () {
-        currentIndex = (currentIndex + 1) % questions.length;
-        if (document.querySelector('.card-inner').style.transform === 'rotateY(180deg)') {
-            toggleCard(false);
-            showQuestion(currentIndex);
-        }
-        else {
-            showQuestion(currentIndex);
-        }
-
+    $('#button_prev, #button_next').click(function () {
+        currentIndex = this.id === 'button_next' ? (currentIndex + 1) % questions.length : (currentIndex - 1 + questions.length) % questions.length;
+        if (cardInner.style.transform === 'rotateY(180deg)') toggleCard(false);
+        showQuestion(currentIndex);
     });
 });
-
