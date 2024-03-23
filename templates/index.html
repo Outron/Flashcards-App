@@ -45,6 +45,17 @@
                 <button type="submit" id="delete-button" class="material-icons">delete</button>
             </form>
         </div>
+        <div class="change-set">
+            <h2 class="set-text">Change set</h2>
+            <form action="/change_set" method="post">
+                 <select id="set-change" name="set_name">
+                    {% for set in sets %}
+                        <option value="{{set}}">{{set}}</option>
+                     {% endfor %}
+                </select>
+                <button type="submit" id="change-set-button" class="material-icons">change_circle</button>
+            </form>
+        </div>
     </div>
 
     <button id="theme-toggle" class="material-icons">brightness_4</button>

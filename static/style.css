@@ -9,6 +9,24 @@ body {
     background-color: #0078D4;
 }
 
+/* CHANGE THEME */
+.dark-theme {
+    background-color: #333;
+    color: #fff;
+}
+
+#theme-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 34px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* FLASHCARDS */
+
 .flashcard {
     font-size: 40px;
     width: 700px;
@@ -60,26 +78,8 @@ body {
     transform: rotateY(180deg);
 }
 
-.dark-theme {
-    background-color: #333;
-    color: #fff;
-}
-
 .dark-theme .flashcard {
     background-color: #3c3c3c;
-}
-
-.dark-theme .side-menu{
-    background-color: #3c3c3c;
-}
-#theme-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 34px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
 }
 
 
@@ -97,6 +97,10 @@ body {
     z-index: 9999;
 }
 
+.dark-theme .side-menu{
+    background-color: #3c3c3c;
+}
+
 #menu-button {
     position: fixed;
     top: 10px;
@@ -108,13 +112,18 @@ body {
     font-size: 34px;
 }
 
-.add-question .question-delete {
-    display: none;
+.add-question{
     padding-bottom: 20px;
 }
 
 .question-text{
     padding-top: 5%;
+    text-align: center;
+    font-size: 29px;
+}
+
+.set-text{
+    padding-top: 12%;
     text-align: center;
     font-size: 29px;
 }
@@ -133,7 +142,8 @@ body {
 }
 
 #question-select,
-#question-delete
+#question-delete,
+#set-change
 {
     margin: auto;
     width: 100%; 
@@ -144,7 +154,7 @@ body {
     font-size: 16px;
 }
 
-.show-inputs .add-question .edit-question {
+.show-inputs .add-question {
     display: block;
     padding-bottom: 20px;
     
@@ -163,26 +173,40 @@ body {
 }
 
 #add-button:hover {
-    background-color: #005EA2; 
+    background-color: #01548f; 
 }
 
 #delete-button {
     font-size: 24px;
-    background-color: rgb(207, 0, 0); /* Kolor czerwony */
+    background-color: rgb(207, 0, 0); 
     color: white;
     border: none;
     width: 250px; 
     height: 40px; 
-    padding: 10px 20px;
     border-radius: 14px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
 
 #delete-button:hover {
-    background-color: darkred; /* Kolor czerwony po najechaniu */
+    background-color: darkred; 
 }
 
+#change-set-button{
+    font-size: 24px;
+    background-color: rgb(1, 180, 10); 
+    color: white;
+    border: none;
+    width: 250px; 
+    height: 40px; 
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#change-set-button:hover {
+    background-color: darkgreen;
+}
 /* BUTTONS TO CHANGE FLASHCARDS */
 
 #button_prev {

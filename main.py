@@ -14,7 +14,8 @@ app.secret_key = 'super secret key'
 def home():
     if request.method == 'GET':
         questions = list(flashcards.find({}, {"_id": 1, "question": 1, "answer": 1}))
-        return render_template('index.html', questions=questions)
+        sets = db.list_collection_names()
+        return render_template('index.html', questions=questions, sets=sets)
     elif request.method == 'POST':
         questions = list(flashcards.find({}, {"_id": 0, "question": 1, "answer": 1}))
         return jsonify({"questions": questions})
@@ -37,6 +38,17 @@ def delete_question():
     if 'question_id' in request.form:
         question_id = request.form['question_id']
         flashcards.delete_one({'_id': ObjectId(question_id)})
+        return redirect(url_for('home'))
+    else:
+        return 'Invalid request', 400
+
+
+@app.route('/change_set', methods=['POST'])
+def change_set():
+    if 'set_name' in request.form:
+        set_name = request.form['set_name']
+        global flashcards
+        flashcards = db[set_name]
         return redirect(url_for('home'))
     else:
         return 'Invalid request', 400
