@@ -2,10 +2,8 @@ from bson import ObjectId
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from pymongo import MongoClient
 
-
 app = Flask(__name__)
-client = MongoClient('localhost', 27017, username='admin', password='password')
-
+client = MongoClient('mongodb', 27017, username='admin', password='password', authSource='admin')
 db = client.flashcards_db
 flashcards = db.flashcards
 app.secret_key = 'super secret key'
@@ -57,4 +55,4 @@ def change_set():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
