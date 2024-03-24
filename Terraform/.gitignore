@@ -1,10 +1,5 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# GitHub Copilot persisted chat sessions
-/copilot/chatSessions
 # Local .terraform directories
-**/.terraform/*
+.terraform
 
 # Ignore variables files
 *.auto.tfvars
@@ -12,11 +7,11 @@
 # Ignore override files
 *.tfoverride
 
-#ignore tfstate
-*.terraform.tfstate
 # Ignore environment-specific files
 .envrc
 
+*.tfstate
+*.tfstate.backup
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
