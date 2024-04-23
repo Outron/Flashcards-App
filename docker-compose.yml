@@ -4,7 +4,7 @@ services:
     build: .
     command: python main.py
     ports:
-      - "8080:5000"
+      - "5000:5000"
     volumes:
       - .:/app
     links:
@@ -12,13 +12,16 @@ services:
   mongodb:
     image: mongo
     ports:
-      - 27017:27017
+      - "27017:27017"
+    restart: always
     environment:
       - MONGODB_HOST=mongodb
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - mongo-data:/data/db
- 
+volumes:
+  mongo-data:
+    driver: local
 
 

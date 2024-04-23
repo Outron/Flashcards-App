@@ -21,3 +21,15 @@ variable "web_app_name" {
   description = "Name of linux web app"
   default     = "FlashcardsWebApp"
 }
+
+variable "cosmos_db_account" {
+  type = string
+  description = "Name of cosmosdb account"
+  default = "CosmosDB_Account"
+}
+
+variable "mongo_db" {
+  type = string
+  description = "MongoDB database"
+  default = "cosmos_mongo_database"
+}
