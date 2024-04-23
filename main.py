@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 
 app = Flask(__name__)
-client = MongoClient(os.environ.get("MONGO_CONNECTION_STRING"))
+client = MongoClient(os.environ.get("AZURE_COSMOS_CONNECTIONSTRING"))
 db = client.flashcards_db
 flashcards = db.flashcards
 app.secret_key = 'super secret key'
