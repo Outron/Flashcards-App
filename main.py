@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 
 app = Flask(__name__)
-client = MongoClient("mongodb://flashcards-server:5lYtc7GKitIaokdIlxSG8WNtgMKxQAbdzOGQXCjGssJHGMkry4GDuTV0HvNz26EM9hMzrg6lYoUDACDb77v0jQ==@flashcards-server.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@flashcards-server@")
+client = MongoClient(os.environ.get("MONGO_CONNECTION_STRING"))
 db = client.flashcards_db
 flashcards = db.flashcards
 app.secret_key = 'super secret key'
