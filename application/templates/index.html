@@ -12,16 +12,20 @@
 
 <body>
 
-<button id="button_prev" class="material-icons">chevron_left</button>
-
-<div id="flashcard" class="flashcard" onclick="toggleCard(true)">
-    <div class="card-inner">
-        <div class="card-front" id="question"></div>
-        <div class="card-back hidden" id="answer"></div>
-    </div>
+<div class="current-set-container">
+    <p class="current-set">Current set: {{ set_name }}</p>
 </div>
 
-<button id="button_next" class="material-icons">chevron_right</button>
+<div class="flashcard-container">
+    <button id="button_prev" class="material-icons">chevron_left</button>
+    <div id="flashcard" class="flashcard" onclick="toggleCard(true)">
+        <div class="card-inner">
+            <div class="card-front" id="question"></div>
+            <div class="card-back hidden" id="answer"></div>
+        </div>
+    </div>
+    <button id="button_next" class="material-icons">chevron_right</button>
+</div>
 
 <div class="side-menu">
     <button id="menu-button" class="material-icons" onclick="toggleMenu()">menu</button>
@@ -36,7 +40,7 @@
     </div>
     <div class="delete-question">
         <h2 class="question-text">Delete Q&A</h2>
-        <form action="/delete_question" method="post">
+        <form action="/delete_question" method="POST">
             <select id="question-delete" name="question_id">
                 {% for question in questions %}
                 <option value="{{question._id}}">{{question["question"]}}</option>

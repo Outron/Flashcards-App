@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 
 app = Flask(__name__)
-client = MongoClient('mongodb', 27017, username='admin', password='password', authSource='admin')
+client = MongoClient('localhost', 27017, username='admin', password='password', authSource='admin')
 db = client.flashcards_db
 flashcards = db.flashcards
 app.secret_key = 'super secret key'
@@ -15,10 +15,10 @@ def home():
     if request.method == 'GET':
         questions = list(flashcards.find({}, {"_id": 1, "question": 1, "answer": 1}))
         sets = db.list_collection_names()
-        return render_template('index.html', questions=questions, sets=sets)
-    elif request.method == 'POST':
-        questions = list(flashcards.find({}, {"_id": 0, "question": 1, "answer": 1}))
-        return jsonify({"questions": questions})
+        set_name = session.get('set_name', 'default')
+        return render_template('index.html', questions=questions, sets=sets, set_name=set_name)
+    questions = list(flashcards.find({}, {"_id": 0, "question": 1, "answer": 1}))
+    return jsonify({"questions": questions})
 
 
 @app.route('/add_question', methods=['POST'])
