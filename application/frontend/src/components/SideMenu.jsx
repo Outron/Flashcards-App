@@ -6,7 +6,7 @@ import React from 'react';
   import DeleteSet from './DeleteSet';
   import './SideMenu.css';
 
-  const SideMenu = ({ menuOpen, formData, handleInputChange, questions, sets, fetchQuestions }) => (
+  const SideMenu = ({ menuOpen, formData, handleInputChange, questions, sets, fetchQuestions, fetchSets}) => (
     <div className="side-menu" style={{ left: menuOpen ? '0' : '-290px' }}>
       <AddQuestion
         formData={formData}
@@ -17,8 +17,13 @@ import React from 'react';
         handleInputChange={handleInputChange}
         questions={questions}
         fetchQuestions={fetchQuestions} />
-      <ChangeSet formData={formData} handleInputChange={handleInputChange} sets={sets} />
-      <AddSet formData={formData} handleInputChange={handleInputChange} />
+      <ChangeSet
+        formData={formData}
+        handleInputChange={handleInputChange}
+        sets={sets}
+        fetchQuestions={fetchQuestions}
+        fetchSets={fetchSets} />
+      <AddSet formData={formData} handleInputChange={handleInputChange} fetchSets={fetchSets}/>
       <DeleteSet formData={formData} handleInputChange={handleInputChange} sets={sets} />
     </div>
   );

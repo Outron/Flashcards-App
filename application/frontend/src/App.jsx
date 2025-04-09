@@ -83,7 +83,8 @@ const App = () => {
         questions={questions}
         sets={sets}
         changeSet={changeSet}
-        fetchQuestions={fetchQuestions} // Przekazanie funkcji do menu bocznego
+        fetchQuestions={fetchQuestions}
+        fetchSets={fetchSets}
       />
 
       <ThemeToggle toggleTheme={toggleTheme} />
