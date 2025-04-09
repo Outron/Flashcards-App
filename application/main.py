@@ -1,87 +1,93 @@
-from bson import ObjectId
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from pymongo import MongoClient
+from bson import ObjectId
+from pydantic import BaseModel
+import uvicorn
 
+app = FastAPI()
+app.add_middleware(SessionMiddleware, secret_key="super secret key")
 
-app = Flask(__name__)
+origins = [
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 client = MongoClient('localhost', 27017, username='admin', password='password', authSource='admin')
 db = client.flashcards_db
 flashcards = db.flashcards
-app.secret_key = 'super secret key'
 
 
-@app.route("/", methods=['GET', 'POST'])
-def home():
-    if request.method == 'GET':
-        questions = list(flashcards.find({}, {"_id": 1, "question": 1, "answer": 1}))
-        sets = db.list_collection_names()
-        set_name = session.get('set_name', 'default')
-        return render_template('index.html', questions=questions, sets=sets, set_name=set_name)
-    questions = list(flashcards.find({}, {"_id": 0, "question": 1, "answer": 1}))
-    return jsonify({"questions": questions})
+class Question(BaseModel):
+    question: str
+    answer: str
 
 
-@app.route('/add_question', methods=['POST'])
-def add_question():
-    if request.method == 'POST':
-        question = request.form['question']
-        answer = request.form['answer']
-        result = flashcards.insert_one({'question': question, 'answer': answer})
-        session['last_inserted_id'] = str(result.inserted_id)
-        return redirect(url_for('home'))
+@app.get("/")
+async def root():
+    return JSONResponse(content={"message": "Flashcards API Alive!"})
+
+
+@app.get("/questions")
+async def get_questions():
+    questions = list(flashcards.find({}, {"_id": 1, "question": 1, "answer": 1}))
+    for question in questions:
+        question["_id"] = str(question["_id"])
+    return JSONResponse(content={"questions": questions})
+
+
+@app.post("/add_question")
+async def add_question(data: Question):
+    result = flashcards.insert_one(data.dict())
+    return JSONResponse(content={"inserted_id": str(result.inserted_id)})
+
+
+@app.delete("/delete_question")
+async def delete_question(question_id: str = Form(...)):
+    flashcards.delete_one({'_id': ObjectId(question_id)})
+    return JSONResponse(content={"status": "success"})
+
+
+@app.get("/sets")
+async def get_sets():
+    sets = db.list_collection_names()
+    return JSONResponse(content={"sets": sets})
+
+
+@app.post("/change_set")
+async def change_set(set_name: str = Form(...)):
+    global flashcards
+    flashcards = db[set_name]
+    return JSONResponse(content={"current_set": set_name})
+
+
+@app.post("/add_set")
+async def add_set(set_name: str = Form(...)):
+    db.create_collection(set_name)
+    return JSONResponse(content={"status": "set_created", "set_name": set_name})
+
+
+@app.post("/delete_set")
+async def delete_set(set_name: str = Form(...)):
+    db.drop_collection(set_name)
+    sets = db.list_collection_names()
+    global flashcards
+    if sets:
+        default_set = sets[0]
     else:
-        return 'Invalid request', 400
+        default_set = None
+    flashcards = db[default_set] if default_set else None
+    return JSONResponse(content={"status": "set_deleted", "current_set": default_set})
 
 
-@app.route('/delete_question', methods=['POST'])
-def delete_question():
-    if 'question_id' in request.form:
-        question_id = request.form['question_id']
-        flashcards.delete_one({'_id': ObjectId(question_id)})
-        return redirect(url_for('home'))
-    else:
-        return 'Invalid request', 400
-
-
-@app.route('/change_set', methods=['POST'])
-def change_set():
-    if 'set_name' in request.form:
-        set_name = request.form['set_name']
-        session['set_name'] = request.form['set_name']
-        global flashcards
-        flashcards = db[set_name]
-        return redirect(url_for('home'))
-    else:
-        return 'Invalid request', 400
-
-@app.route('/add_set', methods=['POST'])
-def add_set():
-    if 'set_name' in request.form:
-        set_name = request.form['set_name']
-        db.create_collection(set_name)
-        return redirect(url_for('home'))
-    else:
-        return 'Invalid request', 400
-
-@app.route('/delete_set', methods=['POST'])
-def delete_set():
-    if 'set_name' in request.form:
-        set_name = request.form['set_name']
-        db.drop_collection(set_name)
-
-        sets = db.list_collection_names()
-        if sets:
-            default_set = sets[0]
-        else:
-            default_set = 'empty...'
-        session['set_name'] = default_set
-        global flashcards
-        flashcards = db[default_set]
-
-        return redirect(url_for('home'))
-    else:
-        return 'Invalid request', 400
-
-
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
