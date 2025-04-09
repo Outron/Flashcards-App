@@ -60,6 +60,25 @@
             <button type="submit" id="change-set-button" class="material-icons">change_circle</button>
         </form>
     </div>
+
+    <div class="add-set">
+        <h2 class="set-text">Add set</h2>
+        <form action="/add_set" method="POST">
+            <input type="text" name="set_name" id="set-name-input" placeholder="Set name">
+            <button type="submit" id="add-set-button" class="material-icons">add</button>
+        </form>
+    </div>
+
+    <div class="delete-set">
+        <h2 class="set-text">Delete set</h2>
+        <form action="/delete_set" method="post">
+            <select id="set-delete" name="set_name">
+                {% for set in sets %}
+                <option value="{{set}}">{{set}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" id="delete-set-button" class="material-icons">delete</button>
+        </form>
 </div>
 
 <button id="theme-toggle" class="material-icons">brightness_4</button>

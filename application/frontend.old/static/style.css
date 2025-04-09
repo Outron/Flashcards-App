@@ -1,0 +1,208 @@
+body {
+                font-family: "Varela Round", sans-serif;
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: #0078D4;
+            }
+
+            /* CHANGE THEME */
+            .dark-theme {
+                background-color: #333;
+                color: #fff;
+            }
+
+            #theme-toggle {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                font-size: 34px;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+            }
+
+            /* FLASHCARDS */
+            .current-set-container {
+                width: 100%;
+                text-align: center;
+                margin: 20px 0;
+            }
+
+            .current-set {
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            .flashcard-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                margin-bottom: 40px;
+            }
+
+            .flashcard {
+                font-size: 40px;
+                width: 750px;
+                height: 450px;
+                background-color: #fff;
+                display: flex;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: transform 0.5s ease;
+                perspective: 1000px;
+            }
+
+            .card-inner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                transition: transform 0.5s ease;
+                transform-style: preserve-3d;
+            }
+
+            .card-front,
+            .card-back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                backface-visibility: hidden;
+                overflow-wrap: break-word;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .card-back {
+                transform: rotateY(180deg);
+            }
+
+            .dark-theme .flashcard {
+                background-color: #3c3c3c;
+            }
+
+            /* SIDE MENU */
+            .side-menu {
+                position: fixed;
+                top: 0;
+                left: -290px;
+                width: 250px;
+                height: 100%;
+                background-color: #f4f4f4;
+                padding: 20px;
+                transition: left 0.5s ease;
+                z-index: 9999;
+                overflow-y: auto;
+
+            }
+
+            .dark-theme .side-menu {
+                background-color: #3c3c3c;
+            }
+
+            #menu-button {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                cursor: pointer;
+                z-index: 10000;
+                background-color: transparent;
+                border: none;
+                font-size: 34px;
+            }
+
+
+            .add-question,
+            .delete-question,
+            .change-set,
+            .add-set {
+                padding-bottom: 20px;
+            }
+
+            .delete-set {
+                padding-bottom: 20px;
+                margin-bottom: 20px; /* Dodaj odstęp na dole */
+            }
+
+            .question-text,
+            .set-text {
+                padding-top: 5%;
+                text-align: center;
+                font-size: 29px;
+            }
+
+            #question-input,
+            #answer-input,
+            #set-name-input,
+            #question-delete,
+            #set-change,
+            #set-delete {
+                margin: auto;
+                width: 100%; /* Ustaw szerokość na 100% */
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                box-sizing: border-box; /* Upewnij się, że padding jest wliczany do szerokości */
+            }
+
+            #add-button,
+            #delete-button,
+            #change-set-button,
+            #add-set-button,
+            #delete-set-button {
+                background-color: #0078D4;
+                color: white;
+                border: none;
+                border-radius: 14px;
+                width: 100%; /* Ustaw szerokość na 100% */
+                height: 40px;
+                font-size: 24px;
+                cursor: pointer;
+                transition: background-color 0.3s, color 0.3s;
+                box-sizing: border-box; /* Upewnij się, że padding jest wliczany do szerokości */
+            }
+
+            #add-button:hover,
+            #delete-button:hover,
+            #change-set-button:hover,
+            #add-set-button:hover,
+            #delete-set-button:hover {
+                background-color: #01548f;
+            }
+
+            #delete-button {
+                background-color: rgb(207, 0, 0);
+            }
+
+            #delete-button:hover {
+                background-color: darkred;
+            }
+
+            #change-set-button {
+                background-color: rgb(1, 180, 10);
+            }
+
+            #change-set-button:hover {
+                background-color: darkgreen;
+            }
+
+            /* BUTTONS TO CHANGE FLASHCARDS */
+            #button_prev,
+            #button_next {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                font-size: 80px;
+            }

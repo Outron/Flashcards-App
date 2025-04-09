@@ -1,0 +1,47 @@
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -290px;
+    width: 250px;
+    height: 100%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    transition: left 0.5s ease;
+    z-index: 9999;
+    overflow-y: auto;
+}
+
+.dark-theme .side-menu {
+    background-color: #3c3c3c;
+}
+
+#menu-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    z-index: 10000;
+    background-color: transparent;
+    border: none;
+    font-size: 34px;
+}
+
+.add-question,
+.delete-question,
+.change-set,
+.add-set,
+.delete-set {
+    padding-bottom: 20px;
+}
+
+.delete-set {
+    margin-bottom: 20px;
+}
+
+.question-text,
+.set-text {
+    padding-top: 5%;
+    text-align: center;
+    font-size: 29px;
+}
+

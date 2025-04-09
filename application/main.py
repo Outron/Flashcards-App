@@ -54,6 +54,34 @@ def change_set():
     else:
         return 'Invalid request', 400
 
+@app.route('/add_set', methods=['POST'])
+def add_set():
+    if 'set_name' in request.form:
+        set_name = request.form['set_name']
+        db.create_collection(set_name)
+        return redirect(url_for('home'))
+    else:
+        return 'Invalid request', 400
+
+@app.route('/delete_set', methods=['POST'])
+def delete_set():
+    if 'set_name' in request.form:
+        set_name = request.form['set_name']
+        db.drop_collection(set_name)
+
+        sets = db.list_collection_names()
+        if sets:
+            default_set = sets[0]
+        else:
+            default_set = 'empty...'
+        session['set_name'] = default_set
+        global flashcards
+        flashcards = db[default_set]
+
+        return redirect(url_for('home'))
+    else:
+        return 'Invalid request', 400
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
