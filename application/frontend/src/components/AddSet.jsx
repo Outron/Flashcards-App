@@ -5,58 +5,58 @@ import './AddSet.css';
 import api from '../api';
 
 const AddSet = ({ formData, handleInputChange, fetchSets }) => {
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-const handleAddSet = async () => {
-  if (!formData.setName) {
-    toast.error('Set name is required.');
-    return;
-  }
-
-  setLoading(true);
-  try {
-    const response = await api.post(
-      '/add_set',
-      new URLSearchParams({ set_name: formData.setName }), // Konwersja na x-www-form-urlencoded
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } } // Ustawienie nagłówka
-    );
-    if (response.status === 200) {
-      toast.success(`Set "${formData.setName}" added successfully.`);
-      fetchSets(); // Odśwież listę zestawów
-      handleInputChange({ target: { name: 'setName', value: '' } }); // Resetuj pole
+  const handleAddSet = async () => {
+    if (!formData.setName) {
+      toast.error('Set name is required.');
+      return;
     }
-  } catch (error) {
-    console.error('Error adding set:', error);
-    toast.error('An error occurred while adding the set.');
-  } finally {
-    setLoading(false);
-  }
-};
 
-return (
-  <div className="add-set">
-    <h2 className="set-text">Add set</h2>
-    <form>
-      <input
-        className="input-field"
-        type="text"
-        name="setName"
-        placeholder="Set name"
-        value={formData.setName}
-        onChange={handleInputChange}
-      />
-      <button
-        type="button"
-        id="add-set-button"
-        className="material-icons"
-        onClick={handleAddSet}
-        disabled={loading}
-      >
-        add
-      </button>
-    </form>
-  </div>
-);
+    setLoading(true);
+    try {
+      const response = await api.post(
+        '/add_set',
+        new URLSearchParams({ set_name: formData.setName }), // Konwersja na x-www-form-urlencoded
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } } // Ustawienie nagłówka
+      );
+      if (response.status === 200) {
+        toast.success(`Set "${formData.setName}" added successfully.`);
+        fetchSets(); // Odśwież listę zestawów
+        handleInputChange({ target: { name: 'setName', value: '' } }); // Resetuj pole
+      }
+    } catch (error) {
+      console.error('Error adding set:', error);
+      toast.error('An error occurred while adding the set.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="add-set">
+      <h2 className="set-text">Add set</h2>
+      <form>
+        <input
+          className="input-field"
+          type="text"
+          name="setName"
+          placeholder="Set name"
+          value={formData.setName}
+          onChange={handleInputChange}
+        />
+        <button
+          type="button"
+          id="add-set-button"
+          className="material-icons"
+          onClick={handleAddSet}
+          disabled={loading}
+        >
+          add
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default AddSet;

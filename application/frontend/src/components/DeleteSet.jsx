@@ -1,17 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './DeleteSet.css';
-const DeleteSet = ({ formData, handleInputChange, sets }) => (
-  <div className="delete-set">
-    <h2 className="set-text">Delete set</h2>
-    <form>
-      <select className="input-field" name="setToDelete" value={formData.setToDelete} onChange={handleInputChange}>
-        {sets.map((s, index) => (
-          <option key={index} value={s}>{s}</option>
-        ))}
-      </select>
-      <button type="button" id="delete-set-button" className="material-icons">delete</button>
-    </form>
-  </div>
-);
+import api from '../api';
+
+const DeleteSet = ({ formData, handleInputChange, sets, fetchSets }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleDeleteSet = async () => {
+	if (!formData.setToDelete) {
+	  toast.error('Choose a set to delete.');
+	  return;
+	}
+
+	setLoading(true);
+	try {
+	  const response = await api.post(
+		'/delete_set',
+		new URLSearchParams({ set_name: formData.setToDelete }),
+		{ headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+	  );
+
+	  if (response.status === 200) {
+		toast.success(`Set "${formData.setToDelete}" deleted successfully.`);
+		fetchSets(); // Odśwież listę zestawów
+		handleInputChange({ target: { name: 'setToDelete', value: '' } }); // Resetuj pole
+	  }
+	} catch (error) {
+	  console.error('Error deleting set:', error);
+	  toast.error('An error occurred while deleting the set.');
+	} finally {
+	  setLoading(false);
+	}
+  };
+
+  return (
+	<div className="delete-set">
+	  <h2 className="set-text">Delete set</h2>
+	  <form>
+		<select
+		  className="input-field"
+		  name="setToDelete"
+		  value={formData.setToDelete}
+		  onChange={handleInputChange}
+		>
+		  <option value="" disabled style={{ color: '#a9a9a9' }}>
+			Choose set
+		  </option>
+		  {sets.map((s, index) => (
+			<option key={index} value={s} style={{ color: '#000' }}>
+			  {s}
+			</option>
+		  ))}
+		</select>
+		<button
+		  type="button"
+		  id="delete-set-button"
+		  className="material-icons"
+		  onClick={handleDeleteSet}
+		  disabled={loading}
+		>
+		  delete
+		</button>
+	  </form>
+	</div>
+  );
+};
 
 export default DeleteSet;

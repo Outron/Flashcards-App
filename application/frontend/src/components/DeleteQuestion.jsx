@@ -34,19 +34,19 @@ const DeleteQuestion = ({ formData, handleInputChange, questions, fetchQuestions
             <h2 className="question-text">Delete Q&A</h2>
             <form>
                 <select
-                  className="input-field"
-                  name="questionId"
-                  value={formData.questionId}
-                  onChange={handleInputChange}
+                    className="input-field"
+                    name="questionId"
+                    value={formData.questionId}
+                    onChange={handleInputChange}
                 >
-                  <option value="" disabled style={{ color: '#a9a9a9' }}>
-                    Choose question
-                  </option>
-                  {questions.map((q, index) => (
-                    <option key={index} value={index} style={{ color: '#000' }}>
-                      {q.question}
+                    <option value="" disabled style={{ color: '#a9a9a9' }}>
+                        Choose question
                     </option>
-                  ))}
+                    {questions.map((q, index) => (
+                        <option key={index} value={index} style={{ color: '#000' }}>
+                            {q.question}
+                        </option>
+                    ))}
                 </select>
                 <button
                     type="button"
