@@ -76,7 +76,7 @@ async def add_set(set_name: str = Form(...)):
     return JSONResponse(content={"status": "set_created", "set_name": set_name})
 
 
-@app.post("/delete_set")
+@app.delete("/delete_set")
 async def delete_set(set_name: str = Form(...)):
     db.drop_collection(set_name)
     sets = db.list_collection_names()

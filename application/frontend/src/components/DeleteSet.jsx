@@ -7,32 +7,31 @@ import api from '../api';
 const DeleteSet = ({ formData, handleInputChange, sets, fetchSets }) => {
   const [loading, setLoading] = useState(false);
 
-  const handleDeleteSet = async () => {
-	if (!formData.setToDelete) {
-	  toast.error('Choose a set to delete.');
-	  return;
-	}
+    const handleDeleteSet = async () => {
+      if (!formData.setToDelete) {
+        toast.error('Choose a set to delete.');
+        return;
+      }
 
-	setLoading(true);
-	try {
-	  const response = await api.post(
-		'/delete_set',
-		new URLSearchParams({ set_name: formData.setToDelete }),
-		{ headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-	  );
+      setLoading(true);
+      try {
+        const response = await api.delete('/delete_set', {
+          data: new URLSearchParams({ set_name: formData.setToDelete }), // Przekazanie danych w ciele żądania
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        });
 
-	  if (response.status === 200) {
-		toast.success(`Set "${formData.setToDelete}" deleted successfully.`);
-		fetchSets(); // Odśwież listę zestawów
-		handleInputChange({ target: { name: 'setToDelete', value: '' } }); // Resetuj pole
-	  }
-	} catch (error) {
-	  console.error('Error deleting set:', error);
-	  toast.error('An error occurred while deleting the set.');
-	} finally {
-	  setLoading(false);
-	}
-  };
+        if (response.status === 200) {
+          toast.success(`Set "${formData.setToDelete}" deleted successfully.`);
+          fetchSets(); // Odśwież listę zestawów
+          handleInputChange({ target: { name: 'setToDelete', value: '' } }); // Resetuj pole
+        }
+      } catch (error) {
+        console.error('Error deleting set:', error);
+        toast.error('An error occurred while deleting the set.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
 	<div className="delete-set">
