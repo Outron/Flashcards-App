@@ -8,7 +8,7 @@ async def test_root():
     async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
         response = await ac.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "API Alive"}
+    assert response.json() == {"message": "Flashcards API Alive!"}
 
 
 @pytest.mark.asyncio

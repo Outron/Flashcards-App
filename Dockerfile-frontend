@@ -1,0 +1,11 @@
+FROM node
+
+ADD scripts /scripts
+ADD application/frontend /app/frontend
+
+RUN chmod +x /scripts/appown.sh && \
+    bash /scripts/appown.sh
+
+WORKDIR /app/frontend
+USER appown
+CMD ["npm", "start"]

@@ -22,8 +22,9 @@ const DeleteSet = ({ formData, handleInputChange, sets, fetchSets }) => {
 
         if (response.status === 200) {
           toast.success(`Set "${formData.setToDelete}" deleted successfully.`);
-          fetchSets(); // 
+          fetchSets();
           handleInputChange({ target: { name: 'setToDelete', value: '' } });
+        }
       } catch (error) {
         console.error('Error deleting set:', error);
         toast.error('An error occurred while deleting the set.');
