@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pymongo import MongoClient
 from bson import ObjectId
 from pydantic import BaseModel
+from db_config import db, collection
 import uvicorn
+
 
 app = FastAPI()
 origins = [
@@ -19,10 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = MongoClient('localhost', 27017, username='admin', password='password', authSource='admin')
-db = client.flashcards_db
-flashcards = db.flashcards
-
 
 class Question(BaseModel):
     question: str
@@ -36,7 +33,7 @@ async def root():
 
 @app.get("/questions")
 async def get_questions():
-    questions = list(flashcards.find({}, {"_id": 1, "question": 1, "answer": 1}))
+    questions = list(collection.find({}, {"_id": 1, "question": 1, "answer": 1}))
     for question in questions:
         question["_id"] = str(question["_id"])
     return JSONResponse(content={"questions": questions})
@@ -44,13 +41,13 @@ async def get_questions():
 
 @app.post("/add_question")
 async def add_question(data: Question):
-    result = flashcards.insert_one(data.dict())
+    result = collection.insert_one(data.dict())
     return JSONResponse(content={"inserted_id": str(result.inserted_id)})
 
 
 @app.delete("/delete_question")
 async def delete_question(question_id: str = Form(...)):
-    flashcards.delete_one({'_id': ObjectId(question_id)})
+    collection.delete_one({'_id': ObjectId(question_id)})
     return JSONResponse(content={"status": "success"})
 
 
@@ -62,8 +59,8 @@ async def get_sets():
 
 @app.post("/change_set")
 async def change_set(set_name: str = Form(...)):
-    global flashcards
-    flashcards = db[set_name]
+    global collection
+    collection = db[set_name]
     return JSONResponse(content={"current_set": set_name})
 
 
@@ -77,12 +74,12 @@ async def add_set(set_name: str = Form(...)):
 async def delete_set(set_name: str = Form(...)):
     db.drop_collection(set_name)
     sets = db.list_collection_names()
-    global flashcards
+    global collection
     if sets:
         default_set = sets[0]
     else:
         default_set = None
-    flashcards = db[default_set] if default_set else None
+    collection = db[default_set] if default_set else None
     return JSONResponse(content={"status": "set_deleted", "current_set": default_set})
 
 
