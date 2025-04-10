@@ -19,8 +19,8 @@ const DeleteQuestion = ({ formData, handleInputChange, questions, fetchQuestions
 
             if (response.status === 200) {
                 toast.success('Question deleted successfully.');
-                await fetchQuestions(); // Odśwież listę pytań
-                handleInputChange({ target: { name: 'questionId', value: '' } }); // Zresetuj formularz
+                await fetchQuestions();
+                handleInputChange({ target: { name: 'questionId', value: '' } });
             }
         } catch (error) {
             console.error('Error', error);

@@ -10,16 +10,16 @@
 }
 
 #delete-set-button {
-  background-color: rgb(207, 0, 0);
-  color: white;
-  border: none;
-  border-radius: 14px;
-  width: 100%;
-  height: 40px;
-  font-size: 24px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  box-sizing: border-box;
+    background-color: rgb(207, 0, 0);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    width: 100%;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    box-sizing: border-box;
 }
 
 #delete-set-button:hover {

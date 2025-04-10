@@ -33,7 +33,7 @@ async def test_add_question():
 @pytest.mark.asyncio
 async def test_delete_question():
     global question_id
-    assert question_id is not None, "Brak ID pytania do usunięcia"  # Upewnij się, że ID istnieje
+    assert question_id is not None, "There is no question to delete"
     async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
         delete_response = await ac.request("DELETE", "/delete_question", data={"question_id": question_id})
     assert delete_response.status_code == 200

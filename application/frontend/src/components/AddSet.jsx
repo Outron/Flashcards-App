@@ -17,13 +17,13 @@ const AddSet = ({ formData, handleInputChange, fetchSets }) => {
     try {
       const response = await api.post(
         '/add_set',
-        new URLSearchParams({ set_name: formData.setName }), // Konwersja na x-www-form-urlencoded
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } } // Ustawienie nagłówka
+        new URLSearchParams({ set_name: formData.setName }),
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
       );
       if (response.status === 200) {
         toast.success(`Set "${formData.setName}" added successfully.`);
-        fetchSets(); // Odśwież listę zestawów
-        handleInputChange({ target: { name: 'setName', value: '' } }); // Resetuj pole
+        fetchSets();
+        handleInputChange({ target: { name: 'setName', value: '' } });
       }
     } catch (error) {
       console.error('Error adding set:', error);

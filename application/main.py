@@ -1,15 +1,12 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi import FastAPI, Form
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware
 from pymongo import MongoClient
 from bson import ObjectId
 from pydantic import BaseModel
 import uvicorn
 
 app = FastAPI()
-app.add_middleware(SessionMiddleware, secret_key="super secret key")
-
 origins = [
     "http://localhost:3000"
 ]

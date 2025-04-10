@@ -16,15 +16,14 @@ const DeleteSet = ({ formData, handleInputChange, sets, fetchSets }) => {
       setLoading(true);
       try {
         const response = await api.delete('/delete_set', {
-          data: new URLSearchParams({ set_name: formData.setToDelete }), // Przekazanie danych w ciele żądania
+          data: new URLSearchParams({ set_name: formData.setToDelete }),
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         });
 
         if (response.status === 200) {
           toast.success(`Set "${formData.setToDelete}" deleted successfully.`);
-          fetchSets(); // Odśwież listę zestawów
-          handleInputChange({ target: { name: 'setToDelete', value: '' } }); // Resetuj pole
-        }
+          fetchSets(); // 
+          handleInputChange({ target: { name: 'setToDelete', value: '' } });
       } catch (error) {
         console.error('Error deleting set:', error);
         toast.error('An error occurred while deleting the set.');

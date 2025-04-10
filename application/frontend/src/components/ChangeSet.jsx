@@ -23,9 +23,9 @@ const ChangeSet = ({ formData, handleInputChange, sets, fetchQuestions, fetchSet
 
       if (response.status === 200) {
         toast.success(`Set changed to "${formData.setToChange}".`);
-        fetchQuestions(); // Odśwież pytania dla nowego zestawu
-        fetchSets(); // Odśwież listę zestawów
-        handleInputChange({ target: { name: 'setToChange', value: '' } }); // Resetuj pole
+        fetchQuestions();
+        fetchSets();
+        handleInputChange({ target: { name: 'setToChange', value: '' } });
       }
     } catch (error) {
       console.error('Error changing set:', error);
