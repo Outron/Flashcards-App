@@ -9,6 +9,18 @@ services:
 #      - .:/app
 #    links:
 #      - mongodb
+  api:
+    image: api:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+  front:
+    image: front:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
   mongodb:
     image: mongo
     ports:

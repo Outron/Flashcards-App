@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:latest
+        ports:
+          - containerPort: 27017
+        envFrom:
+          - secretRef:
+              name: mongo-secret
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
+---
+
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: mongo-db
+    namespace: dev
+    labels:
+      app: mongo
+  spec:
+    ports:
+      - name: mongodb
+        port: 27017
+        nodePort: 30332
+    type: "NodePort"
+    selector:
+      app: "mongo-db"
