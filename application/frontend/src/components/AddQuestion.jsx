@@ -20,7 +20,7 @@ const AddQuestion = ({ fetchQuestions }) => {
     }
     setLoading(true);
     try {
-      const response = await api.post('/add_question', {
+      const response = await api.post('/api/add_question', {
         question: formData.question,
         answer: formData.answer,
       });

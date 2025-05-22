@@ -7,16 +7,17 @@ spec:
   selector:
     matchLabels:
       app: frontend
-    template:
-      metadata:
-        labels:
-          app: frontend
-      spec:
-        containers:
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
         - name: frontend
           image: frontend:latest
+          imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 3000
+            - containerPort: 3000
 
 ---
 
@@ -25,11 +26,12 @@ kind: Service
 metadata:
   name: frontend-service
   namespace: dev
+  labels:
+    app: frontend
 spec:
-    selector:
-        app: frontend
-    ports:
-    - protocol: TCP
+  selector:
+    app: frontend
+  ports:
+    - name: frontend
       port: 3000
-      targetPort: 3000
-    type: LoadBalancer
+  type: ClusterIP

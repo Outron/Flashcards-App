@@ -68,15 +68,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
+  name: mongo-service
   namespace: dev
   labels:
     app: mongo
 spec:
+  selector:
+    app: mongo
   ports:
     - name: mongo
       port: 27017
       nodePort: 30332
   type: NodePort
-  selector:
-    app: mongo

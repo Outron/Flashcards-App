@@ -15,7 +15,7 @@ const DeleteSet = ({ formData, handleInputChange, sets, fetchSets }) => {
 
       setLoading(true);
       try {
-        const response = await api.delete('/delete_set', {
+        const response = await api.delete('/api/delete_set', {
           data: new URLSearchParams({ set_name: formData.setToDelete }),
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         });

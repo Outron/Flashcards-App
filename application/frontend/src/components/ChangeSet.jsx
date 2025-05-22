@@ -16,7 +16,7 @@ const ChangeSet = ({ formData, handleInputChange, sets, fetchQuestions, fetchSet
     setLoading(true);
     try {
       const response = await api.post(
-        '/change_set',
+        '/api/change_set',
         new URLSearchParams({ set_name: formData.setToChange }),
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
       );

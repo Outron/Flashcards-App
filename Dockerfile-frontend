@@ -1,11 +1,23 @@
-FROM node
-
-ADD scripts /scripts
-ADD ./application/frontend /app/frontend
-
-RUN chmod +x /scripts/appown.sh && \
-    bash /scripts/appown.sh
+FROM node AS build
 
 WORKDIR /app/frontend
+
+ADD scripts /scripts
+ADD ./application/frontend ./
+
+COPY /application/frontend/package*.json ./
+
+RUN chmod +x /scripts/appown.sh && \
+    bash /scripts/appown.sh && \
+    npm install
+
+ADD ./application/frontend ./
+
+RUN npm run build
+
 USER appown
-CMD ["npm", "start"]
+
+FROM nginx
+COPY --from=build /app/frontend/build /usr/share/nginx/html
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY ./application/frontend/frontend-nginx.conf /etc/nginx/conf.d

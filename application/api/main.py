@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from bson import ObjectId
@@ -6,9 +6,13 @@ from pydantic import BaseModel
 from db_config import db, collection
 import uvicorn
 
-
 app = FastAPI()
+
+api_router = APIRouter(prefix="/api")
+
 origins = [
+    "http://frontend-service:3000",
+    "http://127.0.0.1:3000",
     "http://localhost:3000"
 ]
 
@@ -26,12 +30,12 @@ class Question(BaseModel):
     answer: str
 
 
-@app.get("/")
+@api_router.get("/")
 async def root():
     return JSONResponse(content={"message": "Flashcards API Alive!"})
 
 
-@app.get("/questions")
+@api_router.get("/questions")
 async def get_questions():
     questions = list(collection.find({}, {"_id": 1, "question": 1, "answer": 1}))
     for question in questions:
@@ -39,38 +43,38 @@ async def get_questions():
     return JSONResponse(content={"questions": questions})
 
 
-@app.post("/add_question")
+@api_router.post("/add_question")
 async def add_question(data: Question):
     result = collection.insert_one(data.dict())
     return JSONResponse(content={"inserted_id": str(result.inserted_id)})
 
 
-@app.delete("/delete_question")
+@api_router.delete("/delete_question")
 async def delete_question(question_id: str = Form(...)):
     collection.delete_one({'_id': ObjectId(question_id)})
     return JSONResponse(content={"status": "success"})
 
 
-@app.get("/sets")
+@api_router.get("/sets")
 async def get_sets():
     sets = db.list_collection_names()
     return JSONResponse(content={"sets": sets})
 
 
-@app.post("/change_set")
+@api_router.post("/change_set")
 async def change_set(set_name: str = Form(...)):
     global collection
     collection = db[set_name]
     return JSONResponse(content={"current_set": set_name})
 
 
-@app.post("/add_set")
+@api_router.post("/add_set")
 async def add_set(set_name: str = Form(...)):
     db.create_collection(set_name)
     return JSONResponse(content={"status": "set_created", "set_name": set_name})
 
 
-@app.delete("/delete_set")
+@api_router.delete("/delete_set")
 async def delete_set(set_name: str = Form(...)):
     db.drop_collection(set_name)
     sets = db.list_collection_names()
@@ -82,6 +86,8 @@ async def delete_set(set_name: str = Form(...)):
     collection = db[default_set] if default_set else None
     return JSONResponse(content={"status": "set_deleted", "current_set": default_set})
 
+
+app.include_router(api_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

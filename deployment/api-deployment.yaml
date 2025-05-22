@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: api
-          image: api:new5
+          image: api:latest
           imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 8000
+            - containerPort: 8000
 
 ---
 
@@ -29,11 +29,10 @@ metadata:
   labels:
     app: api
 spec:
-  ports:
-    - name: api-service
-      port: 8000
-      targetPort: 8000
-      nodePort: 30369
-  type: NodePort
   selector:
     app: api
+  ports:
+    - name: api
+      port: 8000
+      nodePort: 30333
+  type: NodePort

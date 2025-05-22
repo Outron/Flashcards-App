@@ -16,7 +16,7 @@ const AddSet = ({ formData, handleInputChange, fetchSets }) => {
     setLoading(true);
     try {
       const response = await api.post(
-        '/add_set',
+        '/api/add_set',
         new URLSearchParams({ set_name: formData.setName }),
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
       );

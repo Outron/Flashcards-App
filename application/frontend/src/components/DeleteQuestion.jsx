@@ -15,7 +15,7 @@ const DeleteQuestion = ({ formData, handleInputChange, questions, fetchQuestions
             const deleteData = new URLSearchParams();
             deleteData.append('question_id', questionToDelete._id);
 
-            const response = await api.delete('/delete_question', { data: deleteData });
+            const response = await api.delete('/api/delete_question', { data: deleteData });
 
             if (response.status === 200) {
                 toast.success('Question deleted successfully.');

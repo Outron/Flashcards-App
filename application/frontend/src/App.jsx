@@ -17,7 +17,7 @@ const App = () => {
 
   const fetchQuestions = async () => {
     try {
-      const response = await api.get('/questions');
+      const response = await api.get('/api/questions');
       setQuestions(response.data.questions);
     } catch (error) {
       console.error('Błąd podczas pobierania pytań:', error);
@@ -26,7 +26,7 @@ const App = () => {
 
   const fetchSets = async () => {
     try {
-      const response = await api.get('/sets');
+      const response = await api.get('/api/sets');
       setSets(response.data.sets);
     } catch (error) {
       console.error('Błąd podczas pobierania zestawów:', error);
@@ -35,7 +35,7 @@ const App = () => {
 
   const changeSet = async (setName) => {
     try {
-      await api.post('/change_set', { set_name: setName });
+      await api.post('/api/change_set', { set_name: setName });
       setCurrentSet(setName);
       fetchQuestions();
     } catch (error) {
