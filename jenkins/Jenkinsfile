@@ -7,5 +7,12 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Build API image'){
+            steps{
+                script {
+                    def apiImage = docker.build("api:latest", "-f ../Dockerfile-backend .")
+                }
+            }
+        }
     }
 }
