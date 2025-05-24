@@ -3,6 +3,7 @@ FROM node AS build
 WORKDIR /app/frontend
 
 ADD scripts /scripts
+RUN sed -i 's/\r$//' /scripts/appown.sh
 ADD ./application/frontend ./
 
 COPY /application/frontend/package*.json ./
