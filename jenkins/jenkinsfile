@@ -25,7 +25,8 @@ pipeline {
                     fi
                     pip install -r application/api/requirements.txt
                     nohup python application/api/main.py > api.log 2>&1 &
-                    pytest application/api/tests --disable-warnings -q
+                    pytest application/api/tests
+
                  '''
              }
          }
