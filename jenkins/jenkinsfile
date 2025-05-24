@@ -14,6 +14,22 @@ pipeline {
             }
         }
 
+         stage('Build and Test API') {
+             steps {
+                 sh '''
+                    python -m venv venv
+                    if [ -f "venv/bin/activate" ]; then
+                        source venv/bin/activate
+                    else
+                        source venv/Scripts/activate
+                    fi
+                    pip install -r application/api/requirements.txt
+                    nohup python application/api/main.py > api.log 2>&1 &
+                    pytest application/api/tests --disable-warnings -q
+                 '''
+             }
+         }
+
         stage('Build Backend Image') {
             steps {
                 sh "docker build -t ${BACKEND_IMAGE} -f Dockerfile-backend ."
