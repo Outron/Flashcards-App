@@ -92,9 +92,7 @@ async def get_sets():
 
 @api_router.post("/change_set")
 async def change_set(
-    set_name: str = Form(..., embed=True),  # embed=True obsługuje również JSON
-    db_context: DatabaseContext = Depends(get_db_context)
-):
+    set_name: str = Form(..., embed=True), db_context: DatabaseContext = Depends(get_db_context)):
     if set_name not in db.list_collection_names():
         raise HTTPException(status_code=404, detail="Set not found")
     db_context.current_collection_name = set_name

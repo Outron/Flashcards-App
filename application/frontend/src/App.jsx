@@ -58,7 +58,6 @@ const App = () => {
 
     const changeSet = async (setName) => {
         try {
-            // Tworzymy FormData zamiast JSON
             const formData = new FormData();
             formData.append('set_name', setName);
 
@@ -108,11 +107,15 @@ const App = () => {
     const nextCard = () => handleCardTransition('slide-left');
 
     const handleInputChange = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value});
+        const target = e.target || e;
+        setFormData(prev => ({
+            ...prev,
+            [target.name]: target.value
+        }));
     };
 
     return (
-        <div className="flashcard-container">
+        <div className={`flashcard-container ${menuOpen ? 'menu-open' : ''}`}>
             <ToastContainer
                 position="top-center"
                 autoClose={3000}
@@ -127,7 +130,7 @@ const App = () => {
 
             <div className="current-set-container">
                 <p className="current-set">
-                    {currentSet ? `Current set: ${currentSet}` : 'Current set: None'}
+                    {currentSet ? `Current set: ${currentSet}` : 'No set selected'}
                 </p>
             </div>
 
@@ -150,9 +153,10 @@ const App = () => {
                 </button>
             </div>
 
-            <button id="menu-button" className="material-icons" onClick={toggleMenu}>
+            <button className="material-icons menu-toggle-button" onClick={toggleMenu}>
                 menu
             </button>
+
             <SideMenu
                 menuOpen={menuOpen}
                 formData={formData}
@@ -163,6 +167,7 @@ const App = () => {
                 fetchQuestions={fetchQuestions}
                 fetchSets={fetchSets}
                 currentSet={currentSet}
+                toggleMenu={toggleMenu}
             />
 
             <ThemeToggle toggleTheme={toggleTheme}/>

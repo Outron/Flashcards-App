@@ -1,29 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 :root {
-    --bg-color: #0078D4;
-    --text-color: #000000;
-    --card-bg: #ffffff;
-    --card-text: #000000;
-    --menu-bg: #ffffff;
+    --bg-color: #d1e0f6;
+    --text-color: #222;
+    --card-bg: #fff;
+    --card-text: #222;
+    --menu-bg: #fff;
+    --primary-color: #4285f4;
+    --primary-hover: #3367d6;
+    --shadow: 0 8px 32px rgba(66,133,244,0.10), 0 2px 8px rgba(0,0,0,0.08);
 }
 
-
 body {
-    font-family: "Varela Round", sans-serif;
+    font-family: 'Inter', 'Varela Round', Arial, sans-serif;
     margin: 0;
     padding: 0;
     min-height: 100vh;
     background-color: var(--bg-color);
     color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s, color 0.3s;
     overflow: hidden;
 }
 
 body.dark-theme {
-    --bg-color: #2b2b2b;
-    --text-color: #ffffff;
+    --bg-color: #23272f;
+    --text-color: #f4f8fb;
     --card-bg: #2b2b2b;
-    --card-text: #ffffff;
-    --menu-bg: #2b2b2b;
+    --card-text: #f4f8fb;
+    --menu-bg: #23272f;
 }
 
 .flashcard-container {
@@ -31,80 +35,60 @@ body.dark-theme {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    background: var(--bg-color);
+}
+
+.current-set-container {
+    margin-bottom: 24px;
+    width: 100%;
+    text-align: center;
+}
+
+.current-set {
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+body.dark-theme .current-set {
+    color: #90caf9;
 }
 
 .flashcard-navigation {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 24px;
 }
 
 .nav-button {
     background: none;
     border: none;
-    font-size: 48px;
+    font-size: 2.5rem;
     cursor: pointer;
-    color: #000000;
+    color: var(--primary-color);
     padding: 10px;
-    transition: all 0.3s ease;
+    border-radius: 50%;
+    transition: background 0.2s, transform 0.2s, color 0.2s;
 }
 
 .nav-button:hover {
-    opacity: 0.8;
-    transform: scale(1.2);
+    background: #e3f0fd;
+    color: var(--primary-hover);
+    transform: scale(1.15);
 }
 
 .nav-button:active {
-    transform: scale(0.95);
-}
-
-#button_prev:hover {
-    transform: scale(1.2) translateX(-5px);
-}
-
-#button_next:hover {
-    transform: scale(1.2) translateX(5px);
-}
-
-#button_prev:active {
-    transform: scale(0.95) translateX(-2px);
-}
-
-#button_next:active {
-    transform: scale(0.95) translateX(2px);
+    transform: scale(0.97);
 }
 
 body.dark-theme .nav-button {
-    color: #ffffff;
-}
-
-.current-set-container {
-    margin-bottom: 20px;
-}
-
-.current-set {
-    color: #000000;
-    font-size: 24px;
-    margin: 0;
-}
-
-body.dark-theme .current-set {
-    color: #ffffff;
-}
-
-
-#menu-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
+    color: #90caf9;
     background: none;
-    border: none;
-    font-size: 36px;
-    cursor: pointer;
-    z-index: 1000;
 }
 
-body.dark-theme #menu-button {
-    color: #ffffff;
+body.dark-theme .nav-button:hover {
+    background: #26334d;
+    color: #fff;
 }
