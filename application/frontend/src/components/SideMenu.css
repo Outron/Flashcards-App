@@ -1,8 +1,8 @@
 :root {
-    --secondary-bg-color: #eaf2fb; /* jasny błękit dla menu */
-    --border-color: #c7d7ee; /* delikatna niebieska ramka */
+    --secondary-bg-color: #eaf2fb;
+    --border-color: #c7d7ee;
     --text-color: #222;
-    --input-bg-color: #f6faff; /* bardzo jasny błękit dla inputów */
+    --input-bg-color: #f6faff;
     --primary-color: #4285f4;
     --primary-hover-color: #3367d6;
     --disabled-color: #e0e0e0;
@@ -53,7 +53,7 @@
 .section-text {
     color: var(--text-color);
     margin-bottom: 14px;
-    font-size: 1.3rem; /* było 1.1rem */
+    font-size: 1.4rem;
     text-align: center;
     font-weight: 600;
     letter-spacing: 0.5px;

@@ -41,7 +41,6 @@ const ActionButton = ({onClick, icon, disabled = false, className = ""}) => (
     </button>
 );
 
-
 const TextInput = ({name, value, onChange, placeholder}) => (
     <input
         type="text"
@@ -54,7 +53,6 @@ const TextInput = ({name, value, onChange, placeholder}) => (
 );
 
 const SideMenu = ({
-                      menuOpen,
                       formData,
                       handleInputChange,
                       questions,
@@ -62,8 +60,8 @@ const SideMenu = ({
                       changeSet,
                       fetchQuestions,
                       fetchSets,
-                      currentSet,
-                      toggleMenu
+                      toggleMenu,
+                      currentSet
                   }) => {
     const [loadingAdd, setLoadingAdd] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
@@ -82,7 +80,6 @@ const SideMenu = ({
                 question: formData.question,
                 answer: formData.answer,
             });
-
             if (response.status === 200) {
                 toast.success('Question added successfully.');
                 handleInputChange({target: {name: 'question', value: ''}});
@@ -90,7 +87,6 @@ const SideMenu = ({
                 await fetchQuestions();
             }
         } catch (error) {
-            console.error('Error', error);
             toast.error('An error occurred while adding the question.');
         } finally {
             setLoadingAdd(false);
@@ -109,14 +105,12 @@ const SideMenu = ({
             deleteData.append('question_id', questionToDelete._id);
 
             const response = await api.delete('/api/delete_question', {data: deleteData});
-
             if (response.status === 200) {
                 toast.success('Question deleted successfully.');
                 await fetchQuestions();
                 handleInputChange({target: {name: 'questionId', value: ''}});
             }
         } catch (error) {
-            console.error('Error', error);
             toast.error('An error occurred while deleting the question.');
         } finally {
             setLoadingDelete(false);
@@ -128,14 +122,12 @@ const SideMenu = ({
             toast.error('Choose a set to change.');
             return;
         }
-
         setLoadingChangeSet(true);
         try {
             await changeSet(formData.setToChange);
             toast.success(`Set changed to "${formData.setToChange}".`);
             handleInputChange({target: {name: 'setToChange', value: ''}});
         } catch (error) {
-            console.error('Error changing set:', error);
             toast.error('An error occurred while changing the set.');
         } finally {
             setLoadingChangeSet(false);
@@ -147,7 +139,6 @@ const SideMenu = ({
             toast.error('Set name is required.');
             return;
         }
-
         setLoadingAddSet(true);
         try {
             const response = await api.post(
@@ -161,7 +152,6 @@ const SideMenu = ({
                 handleInputChange({target: {name: 'setName', value: ''}});
             }
         } catch (error) {
-            console.error('Error adding set:', error);
             toast.error('An error occurred while adding the set.');
         } finally {
             setLoadingAddSet(false);
@@ -173,7 +163,6 @@ const SideMenu = ({
             toast.error('Choose a set to delete.');
             return;
         }
-
         setLoadingDeleteSet(true);
         try {
             const response = await api.delete(
@@ -183,117 +172,119 @@ const SideMenu = ({
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }
             );
-
             if (response.status === 200) {
                 toast.success(`Set "${formData.setToDelete}" deleted successfully.`);
-                await fetchSets();
                 handleInputChange({target: {name: 'setToDelete', value: ''}});
+                const updatedSets = await fetchSets();
+                if (formData.setToDelete === currentSet) {
+                    if (updatedSets && updatedSets.length > 0) {
+                        await changeSet(updatedSets[0]);
+                    } else {
+                        await changeSet('');
+                    }
+                }
             }
         } catch (error) {
-            console.error('Error deleting set:', error);
             toast.error('An error occurred while deleting the set.');
         } finally {
             setLoadingDeleteSet(false);
         }
     };
 
+    const menuSections = [
+        {
+            title: "ADD QUESTION",
+            fields: [
+                {type: "text", name: "question", placeholder: "Insert question"},
+                {type: "text", name: "answer", placeholder: "Insert answer"}
+            ],
+            button: {onClick: handleAddQuestion, icon: "add", className: "add-button", loading: loadingAdd}
+        },
+        {
+            title: "DELETE QUESTION",
+            fields: [
+                {
+                    type: "select",
+                    name: "questionId",
+                    placeholder: "Choose question",
+                    options: questions.map((q, index) => ({value: index, label: q.question}))
+                }
+            ],
+            button: {onClick: handleDeleteQuestion, icon: "delete", className: "delete-button", loading: loadingDelete}
+        },
+        {
+            title: "CHANGE SET",
+            fields: [
+                {
+                    type: "select",
+                    name: "setToChange",
+                    placeholder: "Choose set",
+                    options: sets
+                }
+            ],
+            button: {onClick: handleChangeSet, icon: "sync", className: "change-button", loading: loadingChangeSet}
+        },
+        {
+            title: "ADD SET",
+            fields: [
+                {type: "text", name: "setName", placeholder: "Set name"}
+            ],
+            button: {onClick: handleAddSet, icon: "add", className: "add-button", loading: loadingAddSet}
+        },
+        {
+            title: "DELETE SET",
+            fields: [
+                {
+                    type: "select",
+                    name: "setToDelete",
+                    placeholder: "Choose set",
+                    options: sets
+                }
+            ],
+            button: {onClick: handleDeleteSet, icon: "delete", className: "delete-button", loading: loadingDeleteSet}
+        }
+    ];
+
     return (
         <>
-            {}
             <div className="menu-overlay" onClick={toggleMenu}></div>
-
             <div className="side-menu">
                 <ActionButton
                     onClick={toggleMenu}
                     icon="close"
                     className="close-menu"
                 />
-
                 <div className="menu-content">
-                    <MenuSection title="ADD QUESTION">
-                        <TextInput
-                            name="question"
-                            value={formData.question}
-                            onChange={handleInputChange}
-                            placeholder="Insert question"
-                        />
-                        <TextInput
-                            name="answer"
-                            value={formData.answer}
-                            onChange={handleInputChange}
-                            placeholder="Insert answer"
-                        />
-                        <ActionButton
-                            onClick={handleAddQuestion}
-                            icon="add"
-                            disabled={loadingAdd}
-                            className="add-button"
-                        />
-                    </MenuSection>
-
-                    <MenuSection title="DELETE QUESTION">
-                        <SelectField
-                            name="questionId"
-                            value={formData.questionId}
-                            onChange={handleInputChange}
-                            options={questions.map((q, index) => ({value: index, label: q.question}))}
-                            placeholder="Choose question"
-                        />
-                        <ActionButton
-                            onClick={handleDeleteQuestion}
-                            icon="delete"
-                            disabled={loadingDelete}
-                            className="delete-button"
-                        />
-                    </MenuSection>
-
-                    <MenuSection title="CHANGE SET">
-                        <SelectField
-                            name="setToChange"
-                            value={formData.setToChange}
-                            onChange={handleInputChange}
-                            options={sets}
-                            placeholder="Choose set"
-                        />
-                        <ActionButton
-                            onClick={handleChangeSet}
-                            icon="sync"
-                            disabled={loadingChangeSet}
-                            className="change-button"
-                        />
-                    </MenuSection>
-
-                    <MenuSection title="ADD SET">
-                        <TextInput
-                            name="setName"
-                            value={formData.setName}
-                            onChange={handleInputChange}
-                            placeholder="Set name"
-                        />
-                        <ActionButton
-                            onClick={handleAddSet}
-                            icon="add"
-                            disabled={loadingAddSet}
-                            className="add-button"
-                        />
-                    </MenuSection>
-
-                    <MenuSection title="DELETE SET">
-                        <SelectField
-                            name="setToDelete"
-                            value={formData.setToDelete}
-                            onChange={handleInputChange}
-                            options={sets}
-                            placeholder="Choose set"
-                        />
-                        <ActionButton
-                            onClick={handleDeleteSet}
-                            icon="delete"
-                            text="Usuń"
-                            disabled={loadingDeleteSet}
-                            className="delete-button"
-                        />
-                    </MenuSection>
+                    {menuSections.map((section, idx) => (
+                        <MenuSection key={idx} title={section.title}>
+                            {section.fields.map((field, i) =>
+                                field.type === "text" ? (
+                                    <TextInput
+                                        key={i}
+                                        name={field.name}
+                                        value={formData[field.name]}
+                                        onChange={handleInputChange}
+                                        placeholder={field.placeholder}
+                                    />
+                                ) : (
+                                    <SelectField
+                                        key={i}
+                                        name={field.name}
+                                        value={formData[field.name]}
+                                        onChange={handleInputChange}
+                                        options={field.options}
+                                        placeholder={field.placeholder}
+                                    />
+                                )
+                            )}
+                            <ActionButton
+                                onClick={section.button.onClick}
+                                icon={section.button.icon}
+                                disabled={section.button.loading}
+                                className={section.button.className}
+                            />
+                        </MenuSection>
+                    ))}
                 </div>
             </div>
         </>

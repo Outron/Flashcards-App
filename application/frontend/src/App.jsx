@@ -51,8 +51,10 @@ const App = () => {
             if (!currentSet && sets.length > 0) {
                 await changeSet(sets[0]);
             }
+            return sets;
         } catch (error) {
             console.error('Błąd podczas pobierania zestawów:', error);
+            return [];
         }
     };
 
@@ -70,7 +72,6 @@ const App = () => {
             }
 
             await fetchQuestions();
-            console.log('Zmieniono zestaw na:', setName);
         } catch (error) {
             console.error('Błąd podczas zmiany zestawu:', error);
         }
