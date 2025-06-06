@@ -9,7 +9,6 @@ from db_config import db
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
-# CORS configuration remains the same
 origins = [
     "http://frontend-service:3000",
     "http://127.0.0.1:3000",
@@ -90,9 +89,10 @@ async def get_sets():
     sets = db.list_collection_names()
     return JSONResponse(content={"sets": sets})
 
+
 @api_router.post("/change_set")
 async def change_set(
-    set_name: str = Form(...),
+    set_name: str = Form(..., embed=True),  # embed=True obsługuje również JSON
     db_context: DatabaseContext = Depends(get_db_context)
 ):
     if set_name not in db.list_collection_names():
@@ -115,7 +115,7 @@ async def add_set(
 async def delete_set(set_name: str = Form(...),db_context: DatabaseContext = Depends(get_db_context)):
     if set_name not in db.list_collection_names():
         raise HTTPException(status_code=404, detail="Set not found")
-    
+
     db.drop_collection(set_name)
     sets = db.list_collection_names()
 
@@ -123,7 +123,7 @@ async def delete_set(set_name: str = Form(...),db_context: DatabaseContext = Dep
         db_context.current_collection_name = sets[0]
     else:
         db_context.current_collection_name = None
-    
+
     return JSONResponse(content={
         "status": "set_deleted",
         "current_set": db_context.current_collection_name

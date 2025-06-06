@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import api from '../api';
-import {toast} from 'react-toastify'; // usunięto ToastContainer
+import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './AddQuestion.css';
 

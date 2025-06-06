@@ -59,7 +59,6 @@ body.dark-theme {
     transform: scale(0.95);
 }
 
-/* Specyficzne animacje dla każdego przycisku */
 #button_prev:hover {
     transform: scale(1.2) translateX(-5px);
 }
@@ -76,7 +75,6 @@ body.dark-theme {
     transform: scale(0.95) translateX(2px);
 }
 
-/* Zachowanie koloru w trybie ciemnym */
 body.dark-theme .nav-button {
     color: #ffffff;
 }
@@ -91,14 +89,10 @@ body.dark-theme .nav-button {
     margin: 0;
 }
 
-/* Style dla trybu ciemnego */
 body.dark-theme .current-set {
     color: #ffffff;
 }
 
-body.dark-theme .nav-button {
-    color: #ffffff;
-}
 
 #menu-button {
     position: fixed;

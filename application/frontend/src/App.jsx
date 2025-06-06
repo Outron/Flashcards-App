@@ -45,7 +45,12 @@ const App = () => {
     const fetchSets = async () => {
         try {
             const response = await api.get('/api/sets');
-            setSets(response.data.sets);
+            const sets = response.data.sets;
+            setSets(sets);
+
+            if (!currentSet && sets.length > 0) {
+                await changeSet(sets[0]);
+            }
         } catch (error) {
             console.error('Błąd podczas pobierania zestawów:', error);
         }
@@ -53,9 +58,20 @@ const App = () => {
 
     const changeSet = async (setName) => {
         try {
-            await api.post('/api/change_set', {set_name: setName});
-            setCurrentSet(setName);
+            // Tworzymy FormData zamiast JSON
+            const formData = new FormData();
+            formData.append('set_name', setName);
+
+            const response = await api.post('/api/change_set', formData);
+
+            if (response.data && response.data.current_set) {
+                setCurrentSet(response.data.current_set);
+            } else {
+                setCurrentSet(setName);
+            }
+
             await fetchQuestions();
+            console.log('Zmieniono zestaw na:', setName);
         } catch (error) {
             console.error('Błąd podczas zmiany zestawu:', error);
         }
@@ -110,7 +126,9 @@ const App = () => {
             />
 
             <div className="current-set-container">
-                <p className="current-set">Current set: {currentSet}</p>
+                <p className="current-set">
+                    {currentSet ? `Current set: ${currentSet}` : 'Current set: None'}
+                </p>
             </div>
 
             <div className="flashcard-navigation">
@@ -144,6 +162,7 @@ const App = () => {
                 changeSet={changeSet}
                 fetchQuestions={fetchQuestions}
                 fetchSets={fetchSets}
+                currentSet={currentSet}
             />
 
             <ThemeToggle toggleTheme={toggleTheme}/>

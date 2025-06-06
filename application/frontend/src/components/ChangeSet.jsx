@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import {toast} from 'react-toastify';
 import './ChangeSet.css';
-import api from '../api';
 
-const ChangeSet = ({formData, handleInputChange, sets, fetchQuestions, fetchSets}) => {
+const ChangeSet = ({formData, handleInputChange, sets, changeSet, currentSet}) => {
     const [loading, setLoading] = useState(false);
 
     const handleChangeSet = async () => {
@@ -14,18 +13,9 @@ const ChangeSet = ({formData, handleInputChange, sets, fetchQuestions, fetchSets
 
         setLoading(true);
         try {
-            const response = await api.post(
-                '/api/change_set',
-                new URLSearchParams({set_name: formData.setToChange}),
-                {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
-            );
-
-            if (response.status === 200) {
-                toast.success(`Set changed to "${formData.setToChange}".`);
-                fetchQuestions();
-                fetchSets();
-                handleInputChange({target: {name: 'setToChange', value: ''}});
-            }
+            await changeSet(formData.setToChange);
+            toast.success(`Set changed to "${formData.setToChange}".`);
+            handleInputChange({target: {name: 'setToChange', value: ''}});
         } catch (error) {
             console.error('Error changing set:', error);
             toast.error('An error occurred while changing the set.');
