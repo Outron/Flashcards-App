@@ -31,13 +31,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Docker Images To Registry
+      - name: Push Docker Images
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}:api-latest
-            ${{ env.REGISTRY }}/${{ github.repository }}:frontend-latest
+            ${{ env.REGISTRY }}/flashcards-app:api-latest
+            ${{ env.REGISTRY }}/flashcards-app:frontend-latest
           build-args: |
             API_IMAGE=api:latest
             FRONTEND_IMAGE=frontend:latest
