@@ -1,7 +1,6 @@
 FROM python:3.12.2-slim
 
 ADD scripts /scripts
-RUN sed -i 's/\r$//' /scripts/appown.sh
 ADD ./application/api /app/api
 
 RUN chmod +x /scripts/appown.sh && \
