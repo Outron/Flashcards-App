@@ -28,6 +28,7 @@ class Question(BaseModel):
     question: str
     answer: str
 
+
 class DatabaseContext:
     def __init__(self):
         self._current_collection_name: Optional[str] = None
@@ -62,6 +63,7 @@ def get_db_context():
 async def root():
     return JSONResponse(content={"message": "Flashcards API Alive!"})
 
+
 @api_router.get("/questions")
 async def get_questions(collection = Depends(get_collection)):
     questions = list(collection.find({}, {"_id": 1, "question": 1, "answer": 1}))
@@ -69,10 +71,12 @@ async def get_questions(collection = Depends(get_collection)):
         question["_id"] = str(question["_id"])
     return JSONResponse(content={"questions": questions})
 
+
 @api_router.post("/add_question")
 async def add_question(data: Question, collection = Depends(get_collection)):
     result = collection.insert_one(data.model_dump())
     return JSONResponse(content={"inserted_id": str(result.inserted_id)})
+
 
 @api_router.delete("/delete_question")
 async def delete_question(
@@ -98,6 +102,7 @@ async def change_set(
     db_context.current_collection_name = set_name
     return JSONResponse(content={"current_set": set_name})
 
+
 @api_router.post("/add_set")
 async def add_set(
     set_name: str = Form(...),
@@ -108,6 +113,7 @@ async def add_set(
     db.create_collection(set_name)
     db_context.current_collection_name = set_name
     return JSONResponse(content={"status": "set_created", "set_name": set_name})
+
 
 @api_router.delete("/delete_set")
 async def delete_set(set_name: str = Form(...),db_context: DatabaseContext = Depends(get_db_context)):
@@ -126,6 +132,7 @@ async def delete_set(set_name: str = Form(...),db_context: DatabaseContext = Dep
         "status": "set_deleted",
         "current_set": db_context.current_collection_name
     })
+
 
 app.include_router(api_router)
 

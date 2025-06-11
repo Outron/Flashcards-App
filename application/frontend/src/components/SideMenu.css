@@ -59,7 +59,10 @@
     letter-spacing: 0.5px;
 }
 
-.input-field {
+/* Pola formularza */
+.side-menu .input-field,
+.side-menu select.input-field,
+.side-menu textarea.input-field {
     width: 100%;
     padding: 9px 12px;
     margin-bottom: 10px;
@@ -78,7 +81,31 @@
     background: #e3f0fd;
 }
 
-.menu-section-button {
+/* Tryb dark dla input i textarea */
+.dark-theme .side-menu input.input-field,
+.dark-theme .side-menu textarea.input-field {
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+/* Tryb dark dla select */
+.dark-theme .side-menu select.input-field {
+    background-color: #2b2b2b !important;
+    color: #fff !important;
+    border: 1px solid var(--border-color);
+}
+
+.dark-theme .side-menu select.input-field option {
+    background: #2b2b2b !important;
+    color: #fff !important;
+}
+
+/* Przycisk sekcji menu i wspólne style przycisków */
+.menu-section-button,
+button.add-button,
+button.delete-button,
+button.change-button {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -134,6 +161,7 @@ button.change-button:hover {
     opacity: 0.7;
 }
 
+/* Przycisk otwierania/zamykania menu */
 .menu-toggle-button {
     position: fixed;
     top: 20px;
@@ -179,6 +207,7 @@ button.change-button:hover {
     visibility: hidden;
 }
 
+/* Przycisk zamykania menu */
 .close-menu {
     position: absolute;
     top: 10px;
@@ -195,6 +224,7 @@ button.change-button:hover {
     background: transparent !important;
 }
 
+/* Overlay */
 .menu-overlay {
     display: none;
     position: fixed;

@@ -27,6 +27,8 @@ const App = () => {
     const [slideDirection, setSlideDirection] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
 
+
+
     useEffect(() => {
         document.body.classList.toggle('dark-theme', darkTheme);
     }, [darkTheme]);
@@ -86,6 +88,7 @@ const App = () => {
     const toggleMenu = () => setMenuOpen(!menuOpen);
     const toggleCard = () => setFlipped(!flipped);
 
+
     const handleCardTransition = (direction) => {
         if (isAnimating || questions.length === 0) return;
         setIsAnimating(true);
@@ -96,13 +99,13 @@ const App = () => {
                     ? (prev + 1) % questions.length
                     : (prev - 1 + questions.length) % questions.length
             );
-            setFlipped(false);
             setSlideDirection('');
-            setTimeout(() => {
-                setIsAnimating(false);
-            }, 300);
-        }, 300);
+            setIsAnimating(false);
+            setFlipped(false);
+        }, 150);
     };
+
+
 
     const prevCard = () => handleCardTransition('slide-right');
     const nextCard = () => handleCardTransition('slide-left');
@@ -144,8 +147,7 @@ const App = () => {
                     <Flashcard
                         question={questions[currentIndex]?.question}
                         answer={questions[currentIndex]?.answer}
-                        flipped={flipped}
-                        toggleCard={toggleCard}
+                        slideDirection={slideDirection}
                     />
                 </div>
                 <button id="button_next" className="material-icons nav-button" onClick={nextCard}
