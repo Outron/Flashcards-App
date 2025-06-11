@@ -30,11 +30,10 @@ jobs:
       - name: Push Docker Images
         uses: docker/build-push-action@v4
         with:
-            context: .
-            file: Dockerfile-backend
-            push: true
-            tags: |
-              ${{ env.REGISTRY }}/flashcards-app/api:latest
+          context: .
+          file: Dockerfile-backend
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/flashcards-app-api:latest
               
 
 
