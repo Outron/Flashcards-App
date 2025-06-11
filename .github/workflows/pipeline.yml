@@ -34,7 +34,7 @@ jobs:
           file: Dockerfile-backend
           push: true
           tags: ghcr.io/outron/flashcards-app-api:latest
-
+              
 
 
 
