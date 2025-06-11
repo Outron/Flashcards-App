@@ -14,7 +14,8 @@ const App = () => {
     const [sets, setSets] = useState([]);
     const [questions, setQuestions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [flipped, setFlipped] = useState(false);
+    const [slideDirection, setSlideDirection] = useState('');
+    const [isAnimating, setIsAnimating] = useState(false);
     const [formData, setFormData] = useState({
         question: '',
         answer: '',
@@ -24,21 +25,24 @@ const App = () => {
         setToDelete: ''
     });
 
-    const [slideDirection, setSlideDirection] = useState('');
-    const [isAnimating, setIsAnimating] = useState(false);
-
-
-
     useEffect(() => {
         document.body.classList.toggle('dark-theme', darkTheme);
     }, [darkTheme]);
+
+    useEffect(() => {
+        fetchInitialData();
+    }, []);
+
+    const fetchInitialData = async () => {
+        await fetchSets();
+        await fetchQuestions();
+    };
 
     const fetchQuestions = async () => {
         try {
             const response = await api.get('/api/questions');
             setQuestions(response.data.questions);
             setCurrentIndex(0);
-            setFlipped(false);
         } catch (error) {
             console.error('Błąd podczas pobierania pytań:', error);
         }
@@ -49,45 +53,25 @@ const App = () => {
             const response = await api.get('/api/sets');
             const sets = response.data.sets;
             setSets(sets);
-
             if (!currentSet && sets.length > 0) {
                 await changeSet(sets[0]);
             }
-            return sets;
         } catch (error) {
             console.error('Błąd podczas pobierania zestawów:', error);
-            return [];
         }
     };
 
     const changeSet = async (setName) => {
         try {
-            const formData = new FormData();
-            formData.append('set_name', setName);
-
-            const response = await api.post('/api/change_set', formData);
-
-            if (response.data && response.data.current_set) {
-                setCurrentSet(response.data.current_set);
-            } else {
-                setCurrentSet(setName);
-            }
-
+            const form = new FormData();
+            form.append('set_name', setName);
+            const response = await api.post('/api/change_set', form);
+            setCurrentSet(response.data?.current_set || setName);
             await fetchQuestions();
         } catch (error) {
             console.error('Błąd podczas zmiany zestawu:', error);
         }
     };
-
-    useEffect(() => {
-        fetchQuestions();
-        fetchSets();
-    }, []);
-
-    const toggleTheme = () => setDarkTheme(!darkTheme);
-    const toggleMenu = () => setMenuOpen(!menuOpen);
-    const toggleCard = () => setFlipped(!flipped);
-
 
     const handleCardTransition = (direction) => {
         if (isAnimating || questions.length === 0) return;
@@ -101,14 +85,8 @@ const App = () => {
             );
             setSlideDirection('');
             setIsAnimating(false);
-            setFlipped(false);
         }, 150);
     };
-
-
-
-    const prevCard = () => handleCardTransition('slide-right');
-    const nextCard = () => handleCardTransition('slide-left');
 
     const handleInputChange = (e) => {
         const target = e.target || e;
@@ -120,27 +98,15 @@ const App = () => {
 
     return (
         <div className={`flashcard-container ${menuOpen ? 'menu-open' : ''}`}>
-            <ToastContainer
-                position="top-center"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
-
+            <ToastContainer position="top-center" autoClose={3000}/>
             <div className="current-set-container">
                 <p className="current-set">
                     {currentSet ? `Current set: ${currentSet}` : 'No set selected'}
                 </p>
             </div>
-
             <div className="flashcard-navigation">
-                <button id="button_prev" className="material-icons nav-button" onClick={prevCard}
-                        disabled={isAnimating}>
+                <button id="button_prev" className="material-icons nav-button"
+                        onClick={() => handleCardTransition('slide-right')} disabled={isAnimating}>
                     chevron_left
                 </button>
                 <div className={`flashcard-animator ${slideDirection} ${isAnimating ? 'animating' : ''}`}>
@@ -150,16 +116,14 @@ const App = () => {
                         slideDirection={slideDirection}
                     />
                 </div>
-                <button id="button_next" className="material-icons nav-button" onClick={nextCard}
-                        disabled={isAnimating}>
+                <button id="button_next" className="material-icons nav-button"
+                        onClick={() => handleCardTransition('slide-left')} disabled={isAnimating}>
                     chevron_right
                 </button>
             </div>
-
-            <button className="material-icons menu-toggle-button" onClick={toggleMenu}>
+            <button className="material-icons menu-toggle-button" onClick={() => setMenuOpen(!menuOpen)}>
                 menu
             </button>
-
             <SideMenu
                 menuOpen={menuOpen}
                 formData={formData}
@@ -170,10 +134,9 @@ const App = () => {
                 fetchQuestions={fetchQuestions}
                 fetchSets={fetchSets}
                 currentSet={currentSet}
-                toggleMenu={toggleMenu}
+                toggleMenu={() => setMenuOpen(!menuOpen)}
             />
-
-            <ThemeToggle toggleTheme={toggleTheme}/>
+            <ThemeToggle toggleTheme={() => setDarkTheme(!darkTheme)}/>
         </div>
     );
 };
