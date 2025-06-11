@@ -34,7 +34,7 @@ jobs:
             file: Dockerfile-backend
             push: true
             tags: |
-              ${{ env.REGISTRY }}/flashcards-app:api-latest
+              ${{ env.REGISTRY }}/flashcards-app/api:latest
               
 
 
