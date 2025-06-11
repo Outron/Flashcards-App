@@ -18,11 +18,11 @@ jobs:
 
       - name: Build API Docker Image
         run: |
-          docker build -t api:latest Dockerfile-backend .
+          docker build -t api:latest -f Dockerfile-backend .
 
       - name: Build Frontend Docker Image
         run: |
-          docker build -t frontend:latest Dockerfile-frontend .
+          docker build -t frontend:latest -f Dockerfile-frontend .
 
 
 
