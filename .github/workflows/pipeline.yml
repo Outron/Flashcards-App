@@ -20,10 +20,6 @@ jobs:
         run: |
           docker build -t api:latest -f Dockerfile-backend .
 
-      - name: Build Frontend Docker Image
-        run: |
-          docker build -t frontend:latest -f Dockerfile-frontend .
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -34,13 +30,13 @@ jobs:
       - name: Push Docker Images
         uses: docker/build-push-action@v4
         with:
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/flashcards-app:api-latest
-            ${{ env.REGISTRY }}/flashcards-app:frontend-latest
-          build-args: |
-            API_IMAGE=api:latest
-            FRONTEND_IMAGE=frontend:latest
+            context: .
+            file: Dockerfile-backend
+            push: true
+            tags: |
+              ${{ env.REGISTRY }}/flashcards-app:api-latest
+              
+
 
 
 
