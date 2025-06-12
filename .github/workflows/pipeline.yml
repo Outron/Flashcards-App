@@ -1,11 +1,10 @@
 name: CI Pipeline
 
 on:
-
   workflow_dispatch:
     inputs:
       API-version:
-        description: 'Version of API image'
+        description: 'Version of API image e.g. v1.0''
         required: true
         type: string
     
@@ -32,7 +31,7 @@ jobs:
       - name: Run API Tests
         run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
 
-      - name: Push Docker Images
+      - name: Push API Image to Registry
         uses: docker/build-push-action@v4
         with:
           context: .
