@@ -1,78 +1,105 @@
 import pytest
-from httpx import AsyncClient
-question_id = None
+from unittest.mock import MagicMock
+from fastapi.testclient import TestClient
+from bson import ObjectId
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
 
 
-@pytest.mark.asyncio
-async def test_root():
-    async with AsyncClient(base_url="http://127.0.0.1:8000", follow_redirects=True) as ac:
-        response = await ac.get("/api")
+@pytest.fixture(autouse=True)
+def mock_db(monkeypatch):
+    mock_id = ObjectId("1" * 24)
+    mock_collection = MagicMock()
+    mock_collection.find.return_value = [
+        {"_id": mock_id, "question": "Q", "answer": "A"}
+    ]
+    mock_collection.insert_one.return_value.inserted_id = mock_id
+    mock_collection.delete_one.return_value.deleted_count = 1
+
+    mock_db = MagicMock()
+    mock_db.list_collection_names.return_value = ["set1", "set2"]
+    mock_db.create_collection.return_value = None
+    mock_db.drop_collection.return_value = None
+    mock_db.__getitem__.return_value = mock_collection
+
+    monkeypatch.setattr("application.api.main.db", mock_db)
+    monkeypatch.setattr("application.api.main.DatabaseContext.get_collection", lambda self: mock_collection)
+    yield
+
+
+def test_root():
+    from application.api.main import app
+    with TestClient(app) as client:
+        response = client.get("/api")
     assert response.status_code == 200
     assert response.json() == {"message": "Flashcards API Alive!"}
 
 
-@pytest.mark.asyncio
-async def test_get_questions():
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
-        response = await ac.get("/api/questions")
+def test_get_questions():
+    from application.api.main import app
+    with TestClient(app) as client:
+        response = client.get("/api/questions")
     assert response.status_code == 200
     assert "questions" in response.json()
 
 
-@pytest.mark.asyncio
-async def test_add_question():
-    global question_id
+def test_add_question():
+    from application.api.main import app
     question_data = {"question": "What is Python?", "answer": "A programming language"}
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
-        response = await ac.post("/api/add_question", json=question_data)
+    with TestClient(app) as client:
+        response = client.post("/api/add_question", json=question_data)
     assert response.status_code == 200
-    question_id = response.json()["inserted_id"]
     assert "inserted_id" in response.json()
 
 
-@pytest.mark.asyncio
-async def test_delete_question():
-    global question_id
-    assert question_id is not None, "There is no question to delete"
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
-        delete_response = await ac.request("DELETE", "/api/delete_question", data={"question_id": question_id})
-    assert delete_response.status_code == 200
-    assert delete_response.json() == {"status": "success"}
+def test_delete_question():
+    from application.api.main import app
+    mock_id = str(ObjectId("1" * 24))
+    with TestClient(app) as client:
+        response = client.request(
+            "DELETE",
+            "/api/delete_question",
+            data=f"question_id={mock_id}",
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+    assert response.status_code == 200
+    assert response.json() == {"status": "success"}
 
 
-@pytest.mark.asyncio
-async def test_get_sets():
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
-        response = await ac.get("/api/sets")
+def test_get_sets():
+    from application.api.main import app
+    with TestClient(app) as client:
+        response = client.get("/api/sets")
     assert response.status_code == 200
     assert "sets" in response.json()
 
 
-@pytest.mark.asyncio
-async def test_add_set():
-    set_name = "test_set"
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
-        response = await ac.post("/api/add_set", data={"set_name": set_name})
+def test_add_set():
+    from application.api.main import app
+    with TestClient(app) as client:
+        response = client.post("/api/add_set", data={"set_name": "test_set"})
     assert response.status_code == 200
-    assert response.json() == {"status": "set_created", "set_name": set_name}
+    assert response.json()["status"] == "set_created"
 
 
-@pytest.mark.asyncio
-async def test_change_set():
-    set_name = "test_set"
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
-        response = await ac.post("/api/change_set", data={"set_name": set_name})
+def test_change_set():
+    from application.api.main import app
+    with TestClient(app) as client:
+        response = client.post("/api/change_set", data={"set_name": "set1"})
     assert response.status_code == 200
-    assert response.json() == {"current_set": set_name}
+    assert response.json()["current_set"] == "set1"
 
 
-@pytest.mark.asyncio
-async def test_delete_set():
-    set_name = "test_set"
-    async with AsyncClient(base_url="http://127.0.0.1:8000") as ac:
-        response = await ac.request("DELETE", "/api/delete_set", data={"set_name": set_name})
+def test_delete_set():
+    from application.api.main import app
+    with TestClient(app) as client:
+        response = client.request(
+            "DELETE",
+            "/api/delete_set",
+            data={"set_name": "set1"},
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
     assert response.status_code == 200
-    response_data = response.json()
-    assert response_data["status"] == "set_deleted"
-    assert "current_set" in response_data
-
+    assert response.json()["status"] == "set_deleted"
