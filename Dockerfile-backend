@@ -1,12 +1,12 @@
 FROM python:3.12.2-slim
 
 ADD scripts /scripts
-ADD ./application/api /app/api
+ADD ./application/api /application/api
 
 RUN chmod +x /scripts/appown.sh && \
     bash /scripts/appown.sh && \
-    pip install -r /app/api/requirements.txt
+    pip install -r /application/api/requirements.txt
 
-WORKDIR /app/api
+WORKDIR /application/api
 USER appown
 CMD ["python", "main.py"]

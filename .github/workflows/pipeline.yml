@@ -1,11 +1,14 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      - ci
-  workflow_dispatch:
 
+  workflow_dispatch:
+    inputs:
+      API-version:
+        description: 'Version of API image'
+        required: true
+        type: string
+    
 env:
   REGISTRY: ghcr.io
 
@@ -16,10 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build API Docker Image
-        run: |
-          docker build -t api:latest -f Dockerfile-backend .
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -27,13 +26,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build API Image
+        run: docker build -t api:${{inputs.API-version}} -f Dockerfile-backend .
+
+      - name: Run API Tests
+        run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
+
       - name: Push Docker Images
         uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile-backend
           push: true
-          tags: ghcr.io/outron/flashcards-app-api:latest
+          tags: ghcr.io/outron/api:${{inputs.API-version}}
               
 
 
