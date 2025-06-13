@@ -1,6 +1,6 @@
 FROM node AS build
 
-WORKDIR /app/frontend
+WORKDIR /application/frontend
 
 ADD scripts /scripts
 ADD ./application/frontend ./

@@ -4,7 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from bson import ObjectId
 from pydantic import BaseModel
 from typing import Optional
-from application.api.db_config import db
+from db_config import db
+import uvicorn
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -22,6 +23,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Models
 class Question(BaseModel):
@@ -49,11 +51,13 @@ class DatabaseContext:
             raise HTTPException(status_code=404, detail="No collection selected")
         return db[self.current_collection_name]
 
+
 db_context = DatabaseContext()
 
 
 def get_collection():
     return db_context.get_collection()
+
 
 def get_db_context():
     return db_context
@@ -65,7 +69,7 @@ async def root():
 
 
 @api_router.get("/questions")
-async def get_questions(collection = Depends(get_collection)):
+async def get_questions(collection=Depends(get_collection)):
     questions = list(collection.find({}, {"_id": 1, "question": 1, "answer": 1}))
     for question in questions:
         question["_id"] = str(question["_id"])
@@ -73,20 +77,21 @@ async def get_questions(collection = Depends(get_collection)):
 
 
 @api_router.post("/add_question")
-async def add_question(data: Question, collection = Depends(get_collection)):
+async def add_question(data: Question, collection=Depends(get_collection)):
     result = collection.insert_one(data.model_dump())
     return JSONResponse(content={"inserted_id": str(result.inserted_id)})
 
 
 @api_router.delete("/delete_question")
 async def delete_question(
-    question_id: str = Form(...),
-    collection = Depends(get_collection)
+        question_id: str,
+        collection=Depends(get_collection)
 ):
     result = collection.delete_one({'_id': ObjectId(question_id)})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Question not found")
     return JSONResponse(content={"status": "success"})
+
 
 @api_router.get("/sets")
 async def get_sets():
@@ -96,7 +101,7 @@ async def get_sets():
 
 @api_router.post("/change_set")
 async def change_set(
-    set_name: str = Form(..., embed=True), db_context: DatabaseContext = Depends(get_db_context)):
+        set_name: str = Form(..., embed=True), db_context: DatabaseContext = Depends(get_db_context)):
     if set_name not in db.list_collection_names():
         raise HTTPException(status_code=404, detail="Set not found")
     db_context.current_collection_name = set_name
@@ -105,8 +110,8 @@ async def change_set(
 
 @api_router.post("/add_set")
 async def add_set(
-    set_name: str = Form(...),
-    db_context: DatabaseContext = Depends(get_db_context)
+        set_name: str = Form(...),
+        db_context: DatabaseContext = Depends(get_db_context)
 ):
     if set_name in db.list_collection_names():
         raise HTTPException(status_code=400, detail="Set already exists")
@@ -116,7 +121,7 @@ async def add_set(
 
 
 @api_router.delete("/delete_set")
-async def delete_set(set_name: str = Form(...),db_context: DatabaseContext = Depends(get_db_context)):
+async def delete_set(set_name: str = Form(...), db_context: DatabaseContext = Depends(get_db_context)):
     if set_name not in db.list_collection_names():
         raise HTTPException(status_code=404, detail="Set not found")
 
@@ -137,5 +142,4 @@ async def delete_set(set_name: str = Form(...),db_context: DatabaseContext = Dep
 app.include_router(api_router)
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

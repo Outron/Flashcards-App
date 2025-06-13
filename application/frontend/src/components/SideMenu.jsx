@@ -85,6 +85,7 @@ const SideMenu = ({
                 handleInputChange({target: {name: 'question', value: ''}});
                 handleInputChange({target: {name: 'answer', value: ''}});
                 await fetchQuestions();
+                handleInputChange({target: {name: 'questionId', value: ''}}); // <-- DODAJ TO
             }
         } catch (error) {
             toast.error('An error occurred while adding the question.');
@@ -100,11 +101,9 @@ const SideMenu = ({
         }
         setLoadingDelete(true);
         try {
-            const questionToDelete = questions[formData.questionId];
-            const deleteData = new URLSearchParams();
-            deleteData.append('question_id', questionToDelete._id);
-
-            const response = await api.delete('/api/delete_question', {data: deleteData});
+            const response = await api.delete(
+                `/api/delete_question?question_id=${encodeURIComponent(formData.questionId)}`
+            );
             if (response.status === 200) {
                 toast.success('Question deleted successfully.');
                 await fetchQuestions();
@@ -116,7 +115,6 @@ const SideMenu = ({
             setLoadingDelete(false);
         }
     };
-
     const handleChangeSet = async () => {
         if (!formData.setToChange) {
             toast.error('Choose a set to change.');
@@ -207,7 +205,7 @@ const SideMenu = ({
                     type: "select",
                     name: "questionId",
                     placeholder: "Choose question",
-                    options: questions.map((q, index) => ({value: index, label: q.question}))
+                    options: questions.map(q => ({ value: q._id, label: q.question }))
                 }
             ],
             button: {onClick: handleDeleteQuestion, icon: "delete", className: "delete-button", loading: loadingDelete}
