@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: { { .Values.frontend.name } }
+  namespace: { { .Values.global.namespace } }
+spec:
+  replicas: { { .Values.frontend.replicas } }
+  selector:
+    matchLabels:
+      app: { { .Values.frontend.name } }
+  template:
+    metadata:
+      labels:
+        app: { { .Values.frontend.name } }
+    spec:
+      containers:
+        - name: { { .Values.frontend.name } }
+          image: { { .Values.frontend.image } }:{{ .Values.global.imagetag }}
+          imagePullPolicy: { { .Values.global.imagepullpolicy } }
+          ports:
+            - containerPort: {{ .Values.frontend.port }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: { { .Values.frontend.serviceName } }
+  namespace: { { .Values.global.namespace } }
+  labels:
+    app: { { .Values.frontend.name } }
+spec:
+  selector:
+    app: { { .Values.frontend.name } }
+  ports:
+    - name: { { .Values.frontend.name } }
+      port: {{ .Values.frontend.port }}
+  type: {{ .Values.frontend.serviceType }}
