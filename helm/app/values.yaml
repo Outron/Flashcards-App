@@ -1,0 +1,11 @@
+global:
+  namespace: dev
+  imagetag: latest
+  imagepullpolicy: IfNotPresent
+
+api:
+  name: api
+  serviceName: api-service
+  replicas: 2
+  image: api
+  port: 8000
