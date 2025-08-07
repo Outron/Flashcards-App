@@ -1,29 +1,29 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: frontend-ingress
-  namespace: dev
+  name: { { Values.frontend.ingressName } }
+  namespace: { { Values.global.namespace } }
   annotations:
-    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/connection-proxy-header: "keep-alive"
+    nginx.ingress.kubernetes.io/proxy-http-version: {{ Values.ingress.httpVersion } }
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ Values.ingress.readTimeout } }
+    nginx.ingress.kubernetes.io/proxy-send-timeout: {{ Values.ingress.sendTimeout } }
+    nginx.ingress.kubernetes.io/connection-proxy-header: {{ Values.ingress.connectionProxyHeader } }
 spec:
   rules:
-    - host: localhost
+    - host: {{ Values.ingress.host } }
       http:
         paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: frontend-service
-              port:
-                number: 3000
-        - path: /api/
-          pathType: Prefix
-          backend:
-            service:
-              name: api-service
-              port:
-                number: 8000
+          - path: {{ Values.ingress.path } }
+            pathType: {{ Values.ingress.pathType } }
+            backend:
+              service:
+                name: {{ Values.frontend.serviceName } }
+                port:
+                  number: {{ Values.frontend.port } }
+          - path: {{ Values.api.path } }
+            pathType: {{ Values.api.pathType } }
+            backend:
+              service:
+                name: {{ Values.api.serviceName } }
+                port:
+                  number: {{ Values.api.port } }
