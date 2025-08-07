@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongo-pvc
-  namespace: dev
+  name: {{ .Values.mongo.pvcName }}
+  namespace: {{ .Values.global.namespace }}
   labels:
-    app: mongo
+    app: {{ .Values.mongo.name }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    - {{ .Values.mongo.accessMode }}
   resources:
     requests:
-      storage: 2Gi
-  storageClassName: standard
+      storage: {{ .Values.mongo.storage.size }}
+  storageClassName: {{ .Values.mongo.storage.storageClassName }}

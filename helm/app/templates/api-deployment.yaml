@@ -1,39 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: { { values.api.name } }
-  namespace: { { values.global.namespace } }
+  name: {{ .Values.api.name }}
+  namespace: {{ .Values.global.namespace }}
 spec:
+  replicas: {{ .Values.api.replicas }}
   selector:
     matchLabels:
-      app: { { values.api.name } }
+      app: {{ .Values.api.name }}
   template:
     metadata:
       labels:
-        app: { { values.api.name } }
+        app: {{ .Values.api.name }}
     spec:
-      replicas: { { values.api.replicas } }
       containers:
-        - name: { { values.api.name } }
-          image: { { values.api.image } }:{ { values.global.imagetag } }
-          imagePullPolicy: { { values.global.imagepullpolicy } }
+        - name: {{ .Values.api.name }}
+          image: {{ .Values.api.image }}:{{ .Values.global.imageTag }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           ports:
-            - containerPort: { { values.api.port } }
-
+            - containerPort: {{ .Values.api.port }}
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: { { values.api.serviceName } }
-  namespace: { { values.global.namespace } }
-  labels:
-    app: { { values.api.name } }
+  name: {{ .Values.api.serviceName }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
-    app: { { values.api.name } }
+    app: {{ .Values.api.name }}
   ports:
-    - name: { { values.api.name } }
-      port: { { values.api.port } }
-      nodePort: {{ values.api.nodePort }}
-  type: { { values.api.serviceType } }
+    - name: api
+      port: {{ .Values.api.port }}
+      nodePort: {{ .Values.api.nodePort }}
+  type: {{ .Values.api.serviceType }}

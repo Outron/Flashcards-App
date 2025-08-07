@@ -1,7 +1,7 @@
 global:
   namespace: dev
-  imagetag: latest
-  imagepullpolicy: IfNotPresent
+  imageTag: latest
+  imagePullPolicy: IfNotPresent
 
 api:
   name: api
@@ -36,6 +36,8 @@ mongo:
     password: cGFzc3dvcmQ=
     host: bW9uZ28tc2VydmljZQ==
     authSource: YWRtaW4=
+  pvcName: mongo-pvc
+  accessMode: ReadWriteOnce
 
 ingress:
   enabled: true
