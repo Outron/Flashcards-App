@@ -1,5 +1,30 @@
 version: '3'
 services:
+  api:
+    image: ghcr.io/outron/api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    ports:
+      - 8000:8000
+    environment:
+      - MONGODB_HOST=mongodb
+      - MONGODB_PORT=27017
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    depends_on:
+      - mongodb
+  frontend:
+    image: ghcr.io/outron/frontend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - api
   mongodb:
     image: mongo
     ports:
