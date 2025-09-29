@@ -7,6 +7,10 @@ on:
         description: 'Version of API image e.g. v1.0'
         required: true
         type: string
+      FRONTEND-version:
+        description: 'Version of Frontend image e.g. v1.0'
+        required: true
+        type: string
     
 env:
   REGISTRY: ghcr.io
@@ -30,6 +34,9 @@ jobs:
 
      # - name: Run API Tests
      #   run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
+
+      - name: Build Frontned Image
+        run: docker build -t frontend:${{inputs.FRONTEND-version} -f Dockerfile-frontend .
 
       - name: Push API Image to Registry
         uses: docker/build-push-action@v4
