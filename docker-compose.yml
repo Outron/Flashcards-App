@@ -1,21 +1,21 @@
 version: '3'
 services:
   api:
-    image: ghcr.io/outron/api:latest
+    image: api:latest
     build:
       context: .
       dockerfile: Dockerfile-backend
     ports:
       - 8000:8000
     environment:
-      - MONGODB_HOST=mongodb
-      - MONGODB_PORT=27017
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      MONGO_HOST: mongo
+      MONGO_USER: admin
+      MONGO_PASSWORD: password
+      MONGO_AUTH_SOURCE: admin
     depends_on:
       - mongodb
   frontend:
-    image: ghcr.io/outron/frontend:latest
+    image: frontend:latest
     build:
       context: .
       dockerfile: Dockerfile-frontend
@@ -26,13 +26,13 @@ services:
     depends_on:
       - api
   mongodb:
-    image: mongo
+    image: mongo:latest
+    container_name: mongo
     ports:
-      - 27017:27017
+      - "27017:27017"
     environment:
-      - MONGODB_HOST=mongo
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - mongo-data:/data/db
 
