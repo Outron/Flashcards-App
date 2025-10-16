@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: api:latest
+          image: api:k1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
