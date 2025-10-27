@@ -1,17 +1,41 @@
 version: '3'
 services:
-  mongodb:
-    image: mongo
+  api:
+    image: api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
     ports:
-      - 27017:27017
+      - 8000:8000
     environment:
-      - MONGODB_HOST=mongo
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      MONGO_HOST: mongo
+      MONGO_USER: admin
+      MONGO_PASSWORD: password
+      MONGO_AUTH_SOURCE: admin
+    depends_on:
+      - mongodb
+  frontend:
+    image: frontend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - api
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - mongo-data:/data/db
 
 volumes:
   mongo-data:
     driver: local
-
