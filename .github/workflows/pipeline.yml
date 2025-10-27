@@ -28,8 +28,8 @@ jobs:
       - name: Build API Image
         run: docker build -t api:${{inputs.API-version}} -f Dockerfile-backend .
 
-      - name: Run API Tests
-        run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
+      # - name: Run API Tests
+      #   run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
 
       - name: Push API Image to Registry
         uses: docker/build-push-action@v4

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: { { .Values.frontend.name } }
-  namespace: { { .Values.global.namespace } }
+  name: {{.Values.frontend.name }}
+  namespace: {{.Values.global.namespace }}
 spec:
-  replicas: { { .Values.frontend.replicas } }
+  replicas: {{.Values.frontend.replicas }}
   selector:
     matchLabels:
-      app: { { .Values.frontend.name } }
+      app: {{.Values.frontend.name }}
   template:
     metadata:
       labels:
-        app: { { .Values.frontend.name } }
+        app: {{.Values.frontend.name }}
     spec:
       containers:
-        - name: { { .Values.frontend.name } }
-          image: { { .Values.frontend.image } }:{{ .Values.global.imagetag }}
-          imagePullPolicy: { { .Values.global.imagepullpolicy } }
+        - name: {{.Values.frontend.name }}
+          image: {{.Values.frontend.image }}:{{ .Values.global.imageTag }}
+          imagePullPolicy: {{.Values.global.imagePullPolicy }}
           ports:
             - containerPort: {{ .Values.frontend.port }}
 
@@ -25,14 +25,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: { { .Values.frontend.serviceName } }
-  namespace: { { .Values.global.namespace } }
+  name: {{.Values.frontend.serviceName }}
+  namespace: {{.Values.global.namespace }}
   labels:
-    app: { { .Values.frontend.name } }
+    app: {{.Values.frontend.name }}
 spec:
   selector:
-    app: { { .Values.frontend.name } }
+    app: {{.Values.frontend.name }}
   ports:
-    - name: { { .Values.frontend.name } }
+    - name: {{.Values.frontend.name }}
       port: {{ .Values.frontend.port }}
   type: {{ .Values.frontend.serviceType }}
