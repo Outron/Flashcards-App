@@ -1,35 +1,11 @@
-variable "rg_name" {
-  type        = string
-  description = "Name of resource group"
-  default     = "FlashcardsApp_RG"
-}
-
-variable "location" {
-  type        = string
-  description = "Location of resources"
-  default     = "Poland Central"
-}
-
-variable "service_plan_name" {
-  type        = string
-  description = "Name of app service plan"
-  default     = "Flashcards-app"
-}
-
-variable "web_app_name" {
-  type        = string
-  description = "Name of linux web app"
-  default     = "FlashcardsWebApp"
-}
-
-variable "cosmos_db_account" {
+variable "project_id" {
   type = string
-  description = "Name of cosmosdb account"
-  default = "CosmosDB_Account"
+  description = "The name of the GCP project."
+  default = "flashcards-project-476421"
 }
 
-variable "mongo_db" {
+variable "project_region" {
   type = string
-  description = "MongoDB database"
-  default = "cosmos_mongo_database"
+  description = "The GCP region to host the resources in."
+  default = "us-europe-west1"
 }
