@@ -4,18 +4,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MONGO_HOST = os.getenv("MONGO_HOST", "mongo-service.dev.svc.cluster.local")
-MONGO_USER = os.getenv("MONGO_USER", "admin")
-MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "password")
-MONGO_AUTH_SOURCE = os.getenv("MONGO_AUTH_SOURCE", "admin")
+MONGO_URI = os.getenv("MONGO_URI")
 
-client = MongoClient(
-    host=MONGO_HOST,
-    port=27017,
-    username=MONGO_USER,
-    password=MONGO_PASSWORD,
-    authSource=MONGO_AUTH_SOURCE
-)
 
-db = client.flashcards_db
+DB_NAME = os.getenv("DB_NAME", "flashcards_db")
+
+try:
+    client = MongoClient(MONGO_URI)
+    print("INFO: connection succeed.")
+except Exception as e:
+    print(f"ERROR {e}")
+    client = None
+
+db = client[DB_NAME]
 collection = db.flashcards
