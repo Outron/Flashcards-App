@@ -9,7 +9,7 @@ on:
         type: environment
 
 env:
-  TF_STATE_BUCKET: b3dbd54efd46e450-terraform-remote-backend
+  TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
   
 jobs:
   terraform:
@@ -33,7 +33,6 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      
       - name: Terraform Init
         run: terraform init -backend-config="bucket=${{ env.TF_STATE_BUCKET }}"
 
