@@ -7,5 +7,17 @@ variable "project_id" {
 variable "project_region" {
   type = string
   description = "The GCP region to host the resources in."
-  default = "us-europe-west1"
+  default = "europe-west1"
+}
+
+variable "ar_api_service" {
+    type = string
+    description = "API of ARTIFACT REGISTRY"
+    default = "artifactregistry.googleapis.com"
+}
+
+variable "cr_api_service" {
+    type = string
+    description = "API of CLOUD RUN"
+    default = "run.googleapis.com"
 }
