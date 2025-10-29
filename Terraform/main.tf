@@ -31,7 +31,6 @@ module "api_repo" {
   repo_id     = "api-repo"
 }
 
-
 module "frontend_repo" {
   source      = "./modules/artifact_registry"
   project_id  = var.project_id
