@@ -25,5 +25,5 @@ variable "cr_api_service" {
 variable "tfstate_bucket" {
   type = string
   description = "The name of the GCS bucket to store Terraform state."
-  default = "flashcards-terraform-state-bucket-476421"
+  default = "b3dbd54efd46e450-terraform-remote-backend"
 }

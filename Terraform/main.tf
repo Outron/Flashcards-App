@@ -55,8 +55,3 @@ module "frontend_service" {
   public_access = true
   depends_on = [module.frontend_repo]
 }
-
-output "api_url" {
-  description = "URL usługi API Cloud Run (do konfiguracji Frontend)."
-  value       = module.api_service.service_uri
-}

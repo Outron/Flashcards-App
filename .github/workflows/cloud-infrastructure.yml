@@ -35,6 +35,9 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+
+      - name: Sec Check
+        run: ls -l
         
       - name: Terraform Apply
         run: terraform apply -auto-approve
