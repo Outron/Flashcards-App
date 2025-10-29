@@ -1,4 +1,4 @@
-name: CI/CD Flashcards
+name: Deploy Flashcards
 
 on:
   workflow_dispatch:
