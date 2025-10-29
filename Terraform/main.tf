@@ -12,24 +12,6 @@ provider "google" {
   region  = var.project_region
 }
 
-resource "google_storage_bucket" "terraform_state_bucket" {
-  name     = var.tfstate_bucket
-  location = var.project_region
-
-  force_destroy               = false
-  public_access_prevention    = "enforced"
-  uniform_bucket_level_access = true
-
-  versioning {
-    enabled = true
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-
-
 resource "google_project_service" "artifact_registry_api" {
   project = var.project_id
   service = var.ar_api_service
