@@ -1,4 +1,4 @@
-name: Deploy Flashcards
+name: CI/CD Flashcards
 
 on:
   workflow_dispatch:
@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       # - name: Auth to GCP
       #   uses: google-github-actions/auth@v2
