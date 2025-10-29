@@ -7,6 +7,10 @@ on:
         description: 'Version of API image e.g. v1.0'
         required: true
         type: string
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: environment
     
 env:
   REGISTRY: gcr.io
