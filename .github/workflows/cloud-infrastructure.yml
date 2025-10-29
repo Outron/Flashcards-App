@@ -1,4 +1,4 @@
-name: cloud-infrastructure.yml
+name: GCP Infrastructure
 
 on:
   workflow_dispatch:
