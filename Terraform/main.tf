@@ -24,7 +24,7 @@ resource "google_storage_bucket" "terraform_state_bucket" {
     enabled = true
   }
 
-  lifecycle_rule {
+  lifecycle {
     prevent_destroy = true
   }
 }
