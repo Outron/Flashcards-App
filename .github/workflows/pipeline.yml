@@ -9,7 +9,7 @@ on:
         type: string
     
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: gcr.io
 
 jobs:
   build:
