@@ -24,6 +24,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: check sec
+        run: echo "${{ secrets.GCP_SA_KEY}}" | wc -c
+      
       - name: Auth to GCP
         uses: google-github-actions/auth@v2 
         with:
