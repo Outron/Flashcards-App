@@ -8,4 +8,3 @@ tests/__pycache__/
 .terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
-backend.tf

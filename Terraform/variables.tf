@@ -21,3 +21,9 @@ variable "cr_api_service" {
     description = "API of CLOUD RUN"
     default = "run.googleapis.com"
 }
+
+variable "tfstate_bucket" {
+  type = string
+  description = "The name of the GCS bucket to store Terraform state."
+  default = "flashcards-terraform-state-bucket-476421"
+}
