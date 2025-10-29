@@ -1,19 +1,20 @@
-name: CI Pipeline
+name: CI/CD Flashcards
 
 on:
   workflow_dispatch:
     inputs:
       API-version:
-        description: 'Version of API image e.g. v1.0'
+        description: 'Version of API image e.g. 1.0'
+        required: true
+        type: string
+      Frontend-version:
+        description: 'Version of Frontend image e.g. 1.0'
         required: true
         type: string
       environment:
         description: 'Deployment environment'
         required: true
         type: environment
-    
-env:
-  REGISTRY: gcr.io
 
 jobs:
   build:
