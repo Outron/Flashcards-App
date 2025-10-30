@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from bson import ObjectId
 from pydantic import BaseModel
 from typing import Optional
-from db_config import db
 import uvicorn
+from application.api.db_config import db
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")

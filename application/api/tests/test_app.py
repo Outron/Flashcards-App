@@ -1,9 +1,10 @@
-import pytest
-from unittest.mock import MagicMock
-from fastapi.testclient import TestClient
-from bson import ObjectId
-import sys
 import os
+import sys
+from unittest.mock import MagicMock
+
+import pytest
+from bson import ObjectId
+from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
 
@@ -58,11 +59,8 @@ def test_delete_question():
     from application.api.main import app
     mock_id = str(ObjectId("1" * 24))
     with TestClient(app) as client:
-        response = client.request(
-            "DELETE",
-            "/api/delete_question",
-            data=f"question_id={mock_id}",
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        response = client.delete(
+            f"/api/delete_question?question_id={mock_id}"
         )
     assert response.status_code == 200
     assert response.json() == {"status": "success"}
