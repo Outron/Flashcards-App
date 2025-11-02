@@ -67,7 +67,7 @@ jobs:
           docker push $AR_TAG
 
     outputs:
-      api-image_path: ${{ vars.API_AR_URL }}/api:${{ github.event.inputs.api-version }}
+      api-image_url: ${{ vars.API_AR_URL }}/api:${{ github.event.inputs.api-version }}
 
   deploy_api:
     runs-on: ubuntu-latest
@@ -86,8 +86,9 @@ jobs:
       - name: Deploy API image to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: api-service
-          image: ${{ needs.build_test_push_api.outputs.api-image_path }}
+          service: ${{ vars.API_SERVICE_NAME }}
+          image: ${{ needs.build_test_push_api.outputs.api-image_url }}
           region: ${{ vars.GCP_REGION }}
           env_vars: |
             ENVIRONMENT=${{ github.event.inputs.environment }}
+            MONGO_URI=${{ secrets.MONGO_URI }}
