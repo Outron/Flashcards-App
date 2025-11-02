@@ -53,12 +53,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
+          API_SERVICE_NAME=$(terraform output -raw api_service_name)
+          gh variable set API_SERVICE_NAME --body "$API_SERVICE_NAME" --repo ${{ github.repository }} --env ${{ github.event.inputs.environment }}
+          
           API_AR_URL=$(terraform output -raw api_ar)
           gh variable set API_AR_URL --body "$API_AR_URL" --repo ${{ github.repository }} --env ${{ github.event.inputs.environment }}
           
           API_URL=$(terraform output -raw api_url)
           gh variable set API_URL --body "$API_URL" --repo ${{ github.repository }} --env ${{ github.event.inputs.environment }}
           
+          FRONTEND_SERVICE_NAME=$(terraform output -raw frontend_service_name)
+          gh variable set FRONTEND_SERVICE_NAME --body "$FRONTEND_SERVICE_NAME" --repo ${{ github.repository }} --env ${{ github.event.inputs.environment }}
+
           FRONTEND_URL=$(terraform output -raw frontend_url)
           gh variable set FRONTEND_URL --body "$FRONTEND_URL" --repo ${{ github.repository }} --env ${{ github.event.inputs.environment }}
           

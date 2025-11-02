@@ -56,9 +56,19 @@ module "frontend_service" {
   depends_on = [module.frontend_repo]
 }
 
+output "api_service_name" {
+  description = "Api service name"
+  value = module.api_service.service_name
+}
+
 output "api_url" {
   description = "URL of api"
   value       = module.api_service.service_uri
+}
+
+output "frontend_service_name" {
+  description = "Frontend service name"
+  value = module.frontend_service.service_name
 }
 
 output "frontend_url" {
