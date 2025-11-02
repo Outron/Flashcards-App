@@ -55,3 +55,13 @@ module "frontend_service" {
   public_access = true
   depends_on = [module.frontend_repo]
 }
+
+output "api_url" {
+  description = "URL of api"
+  value       = module.api_service.service_uri
+}
+
+output "frontend_url" {
+  description = "URL of frontend"
+  value       = module.frontend_service.service_uri
+}
