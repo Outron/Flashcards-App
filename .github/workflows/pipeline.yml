@@ -57,4 +57,4 @@ jobs:
           context: .
           file: Dockerfile-backend
           push: true
-          tags: ${{ vars.API_AR }}/api:${{inputs.API-version}}
+          tags: ${{ vars.API_AR_URL }}/api:${{inputs.API-version}}
