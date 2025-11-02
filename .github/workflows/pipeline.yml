@@ -31,35 +31,20 @@ on:
 jobs:
   build_test_push_api:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
-    permissions:
-      contents: 'read'
     if: ${{ github.event.inputs.deploy-api == 'true' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Auth to GCP
-        id: auth
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_DEPLOY_SA }}
-          token_format: 'access_token'
-
-      - name: Login to Artifact Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ vars.GCP_REGION }}-docker.pkg.dev
-          username: oauth2accesstoken
-          password: ${{steps.auth.outputs.access_token}}
-
-
       - name: Build API Image
-        run: docker build -t api-temp:${{inputs.API-version}} -f Dockerfile-backend .
+        run: docker build -t api:${{inputs.API-version}} -f Dockerfile-backend .
 
       - name: Run API Tests
-        run: docker run --rm api-temp:${{inputs.API-version}} /bin/bash -c "pytest  -v"
+        run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
+
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v2
 
       - name: Push API Image to Registry
         uses: docker/build-push-action@v4
@@ -67,4 +52,4 @@ jobs:
           context: .
           file: Dockerfile-backend
           push: true
-          tags: ${{ vars.API_AR_URL }}/api:${{inputs.API-version}}
+          tags: ${{ vars.API_AR }}/api:${{inputs.API-version}}
