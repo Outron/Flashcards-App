@@ -9,7 +9,7 @@ on:
         type: environment
 
       destroy_infrastructure:
-        description: 'Option to destroy infra'
+        description: 'Destroy infrastructure'
         required: true
         type: boolean
         default: false
