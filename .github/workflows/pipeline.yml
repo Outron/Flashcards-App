@@ -31,6 +31,9 @@ on:
 jobs:
   build_test_push_api:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    permissions:
+      contents: 'read'
     if: ${{ github.event.inputs.deploy-api == 'true' }}
     
     steps:
