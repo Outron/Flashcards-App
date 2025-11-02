@@ -29,19 +29,8 @@ on:
         type: environment
 
 jobs:
-  setup:
+  build_test_push_api:
     runs-on: ubuntu-latest
-    permissions: 
-      contents: 'read'
-    if: ${{ github.event.inputs.deploy-api == 'true' || github.event.inputs.deploy-frontend == 'true' }}
-
-    steps:
-      - name: Setup complete
-        run: echo "Setup phase done."
-
-  build-api:
-    runs-on: ubuntu-latest
-    needs: setup
     if: ${{ github.event.inputs.deploy-api == 'true' }}
     
     steps:
@@ -63,4 +52,4 @@ jobs:
           context: .
           file: Dockerfile-backend
           push: true
-          tags: ghcr.io/outron/api:${{inputs.API-version}}
+          tags: ${{ vars.API_AR }}/api:${{inputs.API-version}}
