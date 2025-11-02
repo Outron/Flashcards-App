@@ -8,7 +8,7 @@ on:
         required: true
         type: environment
 
-      destroy_infra:
+      destroy_infrastructure:
         description: 'Option to destroy infra'
         required: true
         type: boolean
@@ -26,7 +26,7 @@ jobs:
       run:
         working-directory: ./Terraform
 
-    if: ${{github.event.inputs.destroy_infra == 'false' }}
+    if: ${{github.event.inputs.destroy_infrastructure == 'false' }}
     
     steps:
       - name: Checkout repo
@@ -59,7 +59,7 @@ jobs:
       run:
         working-directory: ./Terraform
 
-    if: ${{ github.event.inputs.destroy_infra == 'true' }} 
+    if: ${{ github.event.inputs.destroy_infrastructure == 'true' }} 
 
     steps:
       - name: Checkout repo
@@ -77,6 +77,6 @@ jobs:
         run: terraform init -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}"
 
       - name: Terraform Destroy
-        run: terrafrom destory -auto-approve
+        run: terrafrom destroy -auto-approve
     
     
