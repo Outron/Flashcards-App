@@ -65,3 +65,13 @@ output "frontend_url" {
   description = "URL of frontend"
   value       = module.frontend_service.service_uri
 }
+
+output "api_ar" {
+  description = "AR api prefix"
+  value       = module.api_repo.path_prefix
+}
+
+output "frontend_ar" {
+  description = "AR frontend prefix"
+  value       = module.frontend_repo.path_prefix
+}
