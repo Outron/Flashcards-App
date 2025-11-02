@@ -39,17 +39,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+  
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v2 
+        with:
+          credentials_json: ${{ secrets.GCP_DEPLOY_SA }}
 
       - name: Build API Image
         run: docker build -t api:${{inputs.API-version}} -f Dockerfile-backend .
 
       - name: Run API Tests
         run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
-
-      - name: Auth to GCP
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_DEPLOY_KEY }}
 
       - name: Push API Image to Registry
         uses: docker/build-push-action@v4
