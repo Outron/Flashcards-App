@@ -70,4 +70,8 @@ jobs:
           password: ${{steps.auth.outputs.access_token}}
 
       - name: Push API Image to Registry
-        run: docker push ${{ vars.API_AR_URL }}/api:${{inputs.API-version}}
+        run: |
+          LOCAL_TAG=api:${{github.event.inputs.API-version}}
+          FULL_TAG=${{ vars.API_AR_URL }}/api:${{github.event.inputs.API-version}}
+          docker tag $LOCAL_TAG $FULL_TAG
+          docker push $FULL_TAG
