@@ -29,32 +29,17 @@ on:
         type: environment
 
 jobs:
-  build_and_test_api:
+  build_test_push_api:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
-
+    permissions:
+      contents: 'read'
     if: ${{ github.event.inputs.deploy-api == 'true' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build API Image
-        run: docker build -t api:${{inputs.API-version}} -f Dockerfile-backend .
-
-      - name: Run API Tests
-        run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
-
-
-  push_api_image:
-    runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
-    needs: build_and_test_api
-    permissions:
-      contents: 'read'
-    if: ${{ github.event.inputs.deploy-api == 'true' }}
-
-    steps:
       - name: Auth to GCP
         id: auth
         uses: google-github-actions/auth@v2
@@ -69,9 +54,14 @@ jobs:
           username: oauth2accesstoken
           password: ${{steps.auth.outputs.access_token}}
 
+      - name: Build API Image
+        run: docker build -t api:${{github.event.inputs.API-version}} -f Dockerfile-backend .
+
+      - name: Run API Tests
+        run: docker run --rm api:${{github.event.inputs.API-version}} /bin/bash -c "pytest  -v"
+
       - name: Push API Image to Registry
         run: |
-          LOCAL_TAG=api:${{github.event.inputs.API-version}}
-          FULL_TAG=${{ vars.API_AR_URL }}/api:${{github.event.inputs.API-version}}
-          docker tag $LOCAL_TAG $FULL_TAG
-          docker push $FULL_TAG
+          AR_TAG=${{vars.API_AR_URL}}/api:${{github.event.inputs.api-version}}
+          docker tag api:${{github.event.inputs.api-version}} $AR_TAG
+          docker push $AR_TAG
