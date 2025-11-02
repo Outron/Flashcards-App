@@ -46,7 +46,7 @@ jobs:
       - name: Auth to GCP
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ secrets.GCP_DEPLOY_KEY }}
 
       - name: Push API Image to Registry
         uses: docker/build-push-action@v4
