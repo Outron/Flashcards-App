@@ -8,8 +8,15 @@ on:
         required: true
         type: environment
 
+      destroy_infra:
+        description: 'Option to destroy infra'
+        required: true
+        type: boolean
+        default: false
+        
+
 jobs:
-  terraform:
+  create_infrastructure:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     permissions:
@@ -18,7 +25,9 @@ jobs:
     defaults:
       run:
         working-directory: ./Terraform
-        
+
+    if: ${{github.event.inputs.destroy_infra == 'false' }}
+    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -39,3 +48,35 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
+
+  destroy_infrastructure:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    permissions:
+      contents: 'read'
+
+    defaults:
+      run:
+        working-directory: ./Terraform
+
+    if: ${{ github.event.inputs.destroy_infra == 'true' }} 
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v2 
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}"
+
+      - name: Terraform Destroy
+        run: terrafrom destory -auto-approve
+    
+    
