@@ -34,6 +34,10 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     permissions:
       contents: 'read'
+    defaults:
+      run:
+        working-directory: ./application/api
+
     if: ${{ github.event.inputs.deploy-api == 'true' }}
 
     steps:
@@ -52,7 +56,7 @@ jobs:
 
       - name: Run API Tests
         run: |
-          cd application/api/tests
+          cd tests
           pytest -v
 
 
