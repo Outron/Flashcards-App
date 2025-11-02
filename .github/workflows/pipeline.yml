@@ -54,13 +54,13 @@ jobs:
       - name: Run API Tests
         run: docker run --rm api:${{inputs.API-version}} /bin/bash -c "pytest  -v"
 
-      # - name: Auth to GCP
-      #   uses: google-github-actions/auth@v2
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v2
 
-      # - name: Push API Image to Registry
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: .
-      #     file: Dockerfile-backend
-      #     push: true
-      #     tags: ghcr.io/outron/api:${{inputs.API-version}}
+      - name: Push API Image to Registry
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile-backend
+          push: true
+          tags: ghcr.io/outron/api:${{inputs.API-version}}
