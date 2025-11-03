@@ -5,7 +5,7 @@ from bson import ObjectId
 from pydantic import BaseModel
 from typing import Optional
 import uvicorn
-from application.api.db_config import db
+from db_config import db
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
