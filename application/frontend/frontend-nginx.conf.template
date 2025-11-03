@@ -13,7 +13,7 @@ server {
 
         resolver 8.8.8.8 valid=30s;
 
-        set $api_url "https://$api_service_url";
+        set $api_url "$api_service_url";
         rewrite ^/api/(.*)$ /$1 break;
         proxy_pass $api_url;
 
