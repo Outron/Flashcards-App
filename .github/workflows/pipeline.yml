@@ -128,8 +128,8 @@ jobs:
       - name: Push Frontend Image to Registry
         run: |
           FRONTEND_AR_TAG=${{vars.FRONTEND_AR_URL}}/frontend:${{github.event.inputs.frontend-version}}
-          docker tag frontend:${{github.event.inputs.frontend-version}} $FRONT_ENDAR_TAG
-          docker push $AR_TAG
+          docker tag frontend:${{github.event.inputs.frontend-version}} $FRONTEND_AR_TAG
+          docker push $FRONTEND_AR_TAG
 
     outputs:
       frontend_image_url: ${{ vars.FRONTEND_AR_URL }}/frontend:${{ github.event.inputs.frontend-version }}
