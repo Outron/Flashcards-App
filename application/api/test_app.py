@@ -20,13 +20,13 @@ def mock_db(monkeypatch):
     mock_db.drop_collection.return_value = None
     mock_db.__getitem__.return_value = mock_collection
 
-    monkeypatch.setattr("application.api.main.db", mock_db)
-    monkeypatch.setattr("application.api.main.DatabaseContext.get_collection", lambda self: mock_collection)
+    monkeypatch.setattr("main.db", mock_db)
+    monkeypatch.setattr("main.DatabaseContext.get_collection", lambda self: mock_collection)
     yield
 
 
 def test_root():
-    from application.api.main import app
+    from main import app
     with TestClient(app) as client:
         response = client.get("/api")
     assert response.status_code == 200
@@ -34,7 +34,7 @@ def test_root():
 
 
 def test_get_questions():
-    from application.api.main import app
+    from main import app
     with TestClient(app) as client:
         response = client.get("/api/questions")
     assert response.status_code == 200
@@ -42,7 +42,7 @@ def test_get_questions():
 
 
 def test_add_question():
-    from application.api.main import app
+    from main import app
     question_data = {"question": "What is Python?", "answer": "A programming language"}
     with TestClient(app) as client:
         response = client.post("/api/add_question", json=question_data)
@@ -51,7 +51,7 @@ def test_add_question():
 
 
 def test_delete_question():
-    from application.api.main import app
+    from main import app
     mock_id = str(ObjectId("1" * 24))
     with TestClient(app) as client:
         response = client.delete(
@@ -62,7 +62,7 @@ def test_delete_question():
 
 
 def test_get_sets():
-    from application.api.main import app
+    from main import app
     with TestClient(app) as client:
         response = client.get("/api/sets")
     assert response.status_code == 200
@@ -70,7 +70,7 @@ def test_get_sets():
 
 
 def test_add_set():
-    from application.api.main import app
+    from main import app
     with TestClient(app) as client:
         response = client.post("/api/add_set", data={"set_name": "test_set"})
     assert response.status_code == 200
@@ -78,7 +78,7 @@ def test_add_set():
 
 
 def test_change_set():
-    from application.api.main import app
+    from main import app
     with TestClient(app) as client:
         response = client.post("/api/change_set", data={"set_name": "set1"})
     assert response.status_code == 200
@@ -86,7 +86,7 @@ def test_change_set():
 
 
 def test_delete_set():
-    from application.api.main import app
+    from main import app
     with TestClient(app) as client:
         response = client.request(
             "DELETE",
