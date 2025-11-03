@@ -17,7 +17,8 @@ RUN npm run build
 
 USER appown
 
-FROM nginx
+FROM nginx:alpine
 COPY --from=build /application/frontend/build /usr/share/nginx/html
 RUN rm -rf /etc/nginx/conf.d/default.conf
-COPY ./application/frontend/frontend-nginx.conf /etc/nginx/conf.d
+COPY ./application/frontend/frontend-nginx.conf.template /etc/nginx/conf.d/frontend-nginx.conf.template
+CMD ["/bin/bash", "-c", "envsubst '$API_URL_GCP' < /etc/nginx/conf.d/frontend-nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
