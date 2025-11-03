@@ -89,6 +89,7 @@ jobs:
           service: ${{ vars.API_SERVICE_NAME }}
           image: ${{ needs.build_test_push_api.outputs.api-image_url }}
           region: ${{ vars.GCP_REGION }}
+          port: 8000
           env_vars: |
             ENVIRONMENT=${{ github.event.inputs.environment }}
             MONGO_URI=${{ secrets.MONGO_URI }}
