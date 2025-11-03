@@ -157,3 +157,4 @@ jobs:
           flags: --allow-unauthenticated
           env_vars: |
             ENVIRONMENT=${{ github.event.inputs.environment }}
+            API_URL_GCP=${{ vars.API_URL }}
