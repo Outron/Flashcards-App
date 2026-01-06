@@ -11,8 +11,6 @@ RUN chmod +x /scripts/appown.sh && \
     bash /scripts/appown.sh && \
     npm install
 
-ADD ./application/frontend ./
-
 RUN npm run build
 
 USER appown
